@@ -1,0 +1,31 @@
+{
+  "name": "Tool-Box",
+  "version": "1.0.0",
+  "description": "Methods in common use. Supplement to jQuery and Underscore.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "jquery",
+    "underscore"
+  ],
+  "author": "Ash Zhang",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.12.3",
+    "express-handlebars": "^2.0.1"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-less": "^1.0.1",
+    "grunt-contrib-uglify": "^0.9.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-karma": "^0.10.1",
+    "karma": "^0.12.31",
+    "karma-chrome-launcher": "^0.1.8",
+    "karma-mocha": "^0.1.10",
+    "karma-sinon-chai": "^0.3.0",
+    "nodemon": "latest"
+  }
+}

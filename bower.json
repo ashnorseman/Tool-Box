@@ -1,0 +1,14 @@
+{
+  "name": "Tool-Box",
+  "version": "1.0.0",
+  "authors": [
+    "Ash Zhang"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "1.11.3",
+    "underscore": "1.8.3",
+    "normalize.css": "3.0.3",
+    "lesshat": "3.0.2"
+  }
+}
