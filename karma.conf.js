@@ -17,8 +17,10 @@ module.exports = function(config) {
     files: [
       'public/js/lib/jquery.min.js',
       'public/js/lib/underscore-min.js',
+      'public/js/lib/backbone-min.js',
       'public/js/jquery-ext.js',
       'public/js/underscore-ext.js',
+      'public/js/backbone-ext.js',
       'test/**/*.js'
     ],
 

@@ -207,10 +207,9 @@ _.mixin({
 
   /**
    * Safe console.error
-   * @param {any} msg
    */
-  error: function (msg) {
-    window.console && window.console.info(msg);
+  error: function () {
+    window.console && window.console.info.apply(console, arguments);
   },
 
 
@@ -226,10 +225,9 @@ _.mixin({
 
   /**
    * Safe console.log
-   * @param {any} data
    */
-  log: function (data) {
-    window.console && window.console.log(data);
+  log: function () {
+    window.console && window.console.log.apply(console, arguments);
   },
 
 

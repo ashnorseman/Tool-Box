@@ -10,8 +10,8 @@ describe('jquery-ext', function () {
         $centerBig = $('<div id="center" style="position: absolute; left: 0; top: 0; width: 2000px; height: 2000px;">').appendTo('body');
 
     $center.center();
-    expect(_.int($center.css('left'))).to.be.equal((document.documentElement.clientWidth - 100) / 2);
-    expect(_.int($center.css('top'))).to.be.equal((document.documentElement.clientHeight - 100) / 2);
+    expect(_.int($center.css('left'))).to.be.equal(_.int((document.documentElement.clientWidth - 100) / 2));
+    expect(_.int($center.css('top'))).to.be.equal(_.int((document.documentElement.clientHeight - 100) / 2));
 
     $centerBig.center(50, 50);
     expect(_.int($centerBig.css('left'))).to.be.equal(50);

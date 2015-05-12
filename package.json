@@ -1,7 +1,7 @@
 {
   "name": "Tool-Box",
   "version": "1.0.0",
-  "description": "Methods in common use. Supplement to jQuery and Underscore.",
+  "description": "Methods in common use. Supplement to jQuery, Underscore and Backbone.",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

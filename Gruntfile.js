@@ -14,8 +14,9 @@ module.exports = function (grunt) {
         },
         files: {
           'public/dist/tool-box.min.js': [
+            'public/js/jquery-ext.js',
             'public/js/underscore-ext.js',
-            'public/js/jquery-ext.js'
+            'public/js/backbone-ext.js'
           ]
         }
       }
