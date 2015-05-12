@@ -7,7 +7,9 @@
   var modelMethods = ['get', 'set', 'unset', 'clear'],
 
       // Supports `onInitialize`, `onRender`, `onRemove`
-      defaultCallbacks = ['initialize', 'render', 'remove'];
+      defaultCallbacks = ['initialize', 'render', 'remove'],
+
+      ItemView;
 
 
   // ItemView
@@ -21,7 +23,7 @@
    * viewEvents
    * @constructor
    */
-  Backbone.ItemView = function () {
+  ItemView = Backbone.ItemView = function () {
 
     // Inherits
     View.apply(this, arguments);
@@ -39,13 +41,11 @@
     this.trigger('initialize');
   };
 
-  Backbone.ItemView.extend = View.extend;
-
 
   // ItemView API
   // --------------------------
 
-  _.extend(Backbone.ItemView.prototype, Backbone.View.prototype, {
+  _.extend(ItemView.prototype, View.prototype, {
     template: '',
 
 
@@ -220,5 +220,8 @@
       }
     }
   });
+
+
+  ItemView.extend = View.extend;
 
 }(Backbone.Model, Backbone.View));
