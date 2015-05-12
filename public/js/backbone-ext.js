@@ -75,8 +75,10 @@
 
     /**
      * Link another view, and listens for its view events and model events
-     * @param {Backbone.ItemView} anotherView
-     * @param {Object} options
+     * `~EventsListening` means listen to another view or its model's events
+     * `~EventsListened` means another view is listening to this view or its models events
+     * @param {Backbone.ItemView}         anotherView
+     * @param {Object}                    options
      * @param {string|jQuery|HTMLElement} options.holder (effective after parent render)
      * @param {object}                    options.modelEventsListening
      * @param {object}                    options.viewEventsListening
@@ -109,8 +111,8 @@
     /**
      * Listen to model events map
      * Like: { modelEvents: { 'change:value': 'render' } }
-     * @param {{event: string|Function}} modelEvents
-     * @param {Backbone.Model} [model]
+     * @param {{event: string|Function}}  modelEvents
+     * @param {Backbone.Model}            [model]
      * @returns {Backbone.ItemView}
      */
     listenToModelEvents: function (modelEvents, model) {
@@ -130,11 +132,11 @@
 
 
     /**
-     * Auto-fired view event callbacks
-     * e.g. Trigger `initialize` on view will fire `onInitialize` callback
-     *      `sub` view triggering `remove` will fire `onSubRemove` callback
-     * @param {[string]|{event: string}}  viewEvents
-     * @param {Backbone.View}             [view]
+     * Listen to view events map
+     * `viewEvents` can be an array or a map
+     * An array will auto generate callbacks like `render` -> `onRender`
+     * @param {[string]|{event: string|Function}} viewEvents
+     * @param {Backbone.View}                     [view]
      * @returns {Backbone.ItemView}
      */
     listenToViewEvents: function (viewEvents, view) {

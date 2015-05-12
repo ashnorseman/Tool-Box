@@ -45,3 +45,246 @@ Test if an element is the child of another
 
     @param {string|HTMLElement|jQuery} parent
     @returns {boolean}
+
+* * *
+
+Underscore Plugins
+------------------
+
+### Arrays
+
+#### `_.moveIndex(arr, item, step)`
+
+Move an item within its parent array
+
+step > 0: move down
+
+step < 0: move up
+
+    @param {Array} arr
+    @param {any} item
+    @param {number} step
+
+### Dates
+
+#### `_.dayStart(timestamp)`
+
+The start point (0 millisecond) of a day
+
+    @param {number|Date} timestamp
+    @returns {number}
+
+#### `_.dayEnd(timestamp)`
+
+The end point (last millisecond) of a day
+
+    @param {number|Date} timestamp
+    @returns {number}
+
+#### `_.formatTime(timestamp, format)`
+
+Format a date to a string
+
+Supports: YYYY, YY, MM, M, DD, D, HH, H, mm, m, ss, s
+
+    @param {number|Date} timestamp
+    @param {string}      [format='YYYY-MM-DD']
+    @returns {string}
+
+### Objects
+
+#### `_.exists(val)`
+
+Checks whether or not the value is "existy"
+
+Both null and undefined are considered non-existy values.
+
+All other values are existy.
+
+    @param {any} val
+    @returns {boolean}
+
+#### `_.isNegative(num)`
+
+Checks whether the value is a negative number
+
+    @param {number} num
+    @returns {boolean}
+
+#### `_.isPositive(num)`
+
+Checks whether the value is a positive number
+
+    @param {number} num
+    @returns {boolean}
+
+#### `_.isValidDate(date)`
+
+Checks whether the value is a valid date
+
+That is, the value is both an instance of Date and it represents an actual date.
+
+    @param {Date} date
+    @returns {boolean}
+
+#### `_.safeExtendOwn(obj)`
+
+Behaves like _.defaults
+
+But will log an error when a key already exists in the destination object
+
+    @param {any} obj
+    @returns {any}
+
+#### `_.snapshot(obj)`
+
+Snapshots/clones an object deeply
+
+    @param {Object} obj
+    @returns {Object}
+
+### Utility
+
+#### `_.capitalize(str)`
+
+Capitalize a string
+
+    @param {string} str
+    @returns {string}
+
+#### `_.error()`
+
+Safe console.error
+
+#### `_.int(val)`
+
+Parse integer based 10
+
+    @param {number} val
+    @returns {number}
+
+#### `_.log()`
+
+Safe console.log
+
+
+#### `_.pad(str, targetLen, pad, fromRight)`
+
+Pad a string with any character to given length
+
+    @param {string}  str
+    @param {number}  [targetLen=2]
+    @param {string}  [pad='0']
+    @param {boolean} [fromRight=false]
+    @returns {string}
+
+#### `_.parseQuery(queryStr)`
+
+Parse a query string to an object
+
+    @param {string} queryStr - like '?a=b&c=d'
+    @returns {Object}
+
+* * *
+
+Backbone Plugin
+---------------
+
+### Backbone.ItemView
+
+#### `Backbone.ItemView.extend()`
+
+    Backbone.ItemView.extend({
+      template: '<div class="data"><%= attr %></div>',
+
+      ui: {
+        data: '.data'
+      },
+
+      events: {
+        'click .data': 'onClickData'
+      },
+
+      modelEvents: {
+        change: 'onModelChange'
+      },
+
+      viewEvents: {
+        clear: 'onViewChange'
+      },
+
+      onInitialize: function () {},
+      onRender: function () {},
+      onRemove: function () {},
+
+      onClickData: function () {},
+
+      onModelChange: function () {},
+
+      onViewChange: function () {}
+    });
+
+`ui`: elements saved at `this.ui.data`
+
+`modelEvents`: model events listened
+
+`viewEvents`: view events listened
+
+`onInitialize, onRender, onRemove`: callbacks fired after `initialize, render, remove`
+
+#### `itemView.get()`
+#### `itemView.set()`
+#### `itemView.unset()`
+#### `itemView.clear()`
+
+These are shortcut methods to the model.
+
+#### `itemView.modelShortcut(modelMethods)`
+
+Make model methods callable by the view
+
+`this` still refers to the model in methods
+
+    @param {[string]} modelMethods
+    @returns {Backbone.ItemView}
+
+#### `itemView.listenToModelEvents(modelEvents, model)`
+
+Listen to model events map
+
+Like: { modelEvents: { 'change:value': 'render' } }
+
+    @param {{event: string|Function}} modelEvents
+    @param {Backbone.Model}           [model]
+    @returns {Backbone.ItemView}
+
+#### `itemView.listenToViewEvents(viewEvents, view)`
+
+Listen to view events map
+
+`viewEvents` can be an array or a map
+
+An array will auto generate callbacks like `render` -> `onRender`
+
+    @param {[string]|{event: string|Function}}  viewEvents
+    @param {Backbone.View}                      [view]
+    @returns {Backbone.ItemView}
+
+#### `itemView.linkView(anotherView, options)`
+
+Link another view, and listens for its view events and model events
+
+`~EventsListening` means listen to another view or its model's events
+
+`~EventsListened` means another view is listening to this view or its models events
+
+    @param {Backbone.ItemView}         anotherView
+    @param {Object}                    options
+    @param {string|jQuery|HTMLElement} options.holder (effective after parent render)
+    @param {object}                    options.modelEventsListening
+    @param {object}                    options.viewEventsListening
+    @param {object}                    options.modelEventsListened
+    @param {object}                    options.viewEventsListened
+    @param {string}                    [options.anotherName]
+    @param {string}                    [options.thisName]
+    @returns {Backbone.ItemView}

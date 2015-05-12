@@ -113,8 +113,8 @@ _.mixin({
 
 
   /**
-   * Checks whether the value is a negative number.
-   * @param num
+   * Checks whether the value is a negative number
+   * @param {number} num
    * @returns {boolean}
    */
   isNegative: function (num) {
@@ -123,7 +123,7 @@ _.mixin({
 
 
   /**
-   * Checks whether the value is a positive number.
+   * Checks whether the value is a positive number
    * @param {number} num
    * @returns {boolean}
    */
