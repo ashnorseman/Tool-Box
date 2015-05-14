@@ -209,7 +209,7 @@ _.mixin({
    * Safe console.error
    */
   error: function () {
-    window.console && window.console.info.apply(console, arguments);
+    (window.console && window.console.log.apply) ? window.console.info.apply(console, arguments) : (window.console && window.console.info(arguments[0]));
   },
 
 
@@ -227,7 +227,7 @@ _.mixin({
    * Safe console.log
    */
   log: function () {
-    window.console && window.console.log.apply(console, arguments);
+    (window.console && window.console.log.apply) ? window.console.log.apply(console, arguments) : (window.console && window.console.log(arguments[0]));
   },
 
 
