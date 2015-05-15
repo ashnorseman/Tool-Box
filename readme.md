@@ -192,6 +192,28 @@ Parse a query string to an object
     @param {string} queryStr - like '?a=b&c=d'
     @returns {Object}
 
+### Language
+
+#### `_.addLang(options)`
+
+Add language locale keys
+
+    @param {{code:Object}}   options
+    @param {{locale:string}} options.code
+
+#### `_.parseLocale(locale)`
+
+Return a parsed Locale code of current language
+
+    @param {string} locale
+    @returns {string}
+
+#### `_.setLang(code)`
+
+Set langCode
+
+    @param {string} code
+
 * * *
 
 Backbone Plugin

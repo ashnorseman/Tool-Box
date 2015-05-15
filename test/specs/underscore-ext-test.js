@@ -190,4 +190,40 @@ describe('underscore-ext', function () {
     expect(simple.e).to.be.equal('f');
     expect(empty).to.be.deep.equal({});
   });
+
+  it('_.addLang & _.parseLocale', function () {
+    _.addLang({
+      en: {
+        test: 'Test'
+      },
+      zh: {
+        test: '测试'
+      }
+    });
+
+    _.setLang('en');
+    expect(_.parseLocale('test')).to.be.equal('Test');
+    expect(_.parseLocale('no')).to.be.equal('');
+    _.setLang('zh');
+    expect(_.parseLocale('test')).to.be.equal('测试');
+    expect(_.parseLocale('no')).to.be.equal('');
+
+    _.addLang({
+      en: {
+        test: 'Test 2',
+        more: 'More'
+      },
+      zh: {
+        test: '测试 2',
+        more: '更多'
+      }
+    });
+
+    _.setLang('en');
+    expect(_.parseLocale('test')).to.be.equal('Test');
+    expect(_.parseLocale('more')).to.be.equal('More');
+    _.setLang('zh');
+    expect(_.parseLocale('test')).to.be.equal('测试');
+    expect(_.parseLocale('more')).to.be.equal('更多');
+  });
 });

@@ -283,3 +283,49 @@ _.mixin({
     }, {});
   }
 });
+
+
+// Language
+// --------------------------
+
+(function (_) {
+  var lang = {},
+      langCode = '';
+
+
+  /**
+   * Add language locale keys
+   * @param {{code:Object}}   options
+   * @param {{locale:string}} options.code
+   */
+  _.addLang = function (options) {
+    _.each(options, function (content, code) {
+      lang[code] || (lang[code] = {});
+      _.safeExtendOwn(lang[code], content);
+    });
+  };
+
+
+  /**
+   * Return a parsed Locale code of current language
+   * @param {string} locale
+   * @returns {string}
+   */
+  _.parseLocale = function (locale) {
+
+    if (!lang[langCode]) {
+      return '';
+    } else {
+      return lang[langCode][locale] || '';
+    }
+  };
+
+
+  /**
+   * Set langCode
+   * @param {string} code
+   */
+  _.setLang = function (code) {
+    langCode = code;
+  };
+}(_));
