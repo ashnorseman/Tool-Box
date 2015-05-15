@@ -163,7 +163,7 @@ describe('backbone-ext', function () {
       expect(view.model).to.be.equal(model);
     });
 
-    it('inherits model methods: get, set, unset, clear', function () {
+    it('inherits model methods: get, set', function () {
       var model = new Backbone.Model(),
           view = new Backbone.ItemView({
             model: model
@@ -172,17 +172,12 @@ describe('backbone-ext', function () {
       expect(view.get('attr')).to.be.not.ok;
       view.set('attr', 'value');
       expect(view.get('attr')).to.be.equal('value');
-      view.unset('attr');
-      expect(view.get('attr')).to.be.not.ok;
       view.set({
         attr1: 'value1',
         attr2: 'value2'
       });
       expect(view.get('attr1')).to.be.ok;
       expect(view.get('attr2')).to.be.ok;
-      view.clear();
-      expect(view.get('attr1')).to.be.not.ok;
-      expect(view.get('attr2')).to.be.not.ok;
     });
 
     it('modelEvents', function () {

@@ -4,7 +4,7 @@
 
 
 (function (Model, View) {
-  var modelMethods = ['get', 'set', 'unset', 'clear'],
+  var modelMethods = ['get', 'set'],
 
       // Supports `onInitialize`, `onRender`, `onRemove`
       defaultCallbacks = ['initialize', 'render', 'remove'],
