@@ -9,7 +9,33 @@
       // Supports `onInitialize`, `onRender`, `onRemove`
       defaultCallbacks = ['initialize', 'render', 'remove'],
 
+      oldExtend = Model.extend,
+
+      extend,
+
       ItemView;
+
+
+  /**
+   * Model and View inheritance
+   * Extends settings objects like `defaults`, `events`, `modelEvents`, `viewEvents`.
+   * Parent methods will be overwritten.
+   * @param {Object} options
+   * @returns {Object}
+   */
+  extend = function (options) {
+    var inherited = oldExtend.apply(this, arguments),
+        key;
+
+    // Merge options
+    for (key in options) if (options.hasOwnProperty(key)) {
+      if (_.isPureObject(options[key]) && _.isPureObject(this.prototype[key])) {
+        inherited.prototype[key] = _.extend({}, this.prototype[key], options[key]);
+      }
+    }
+
+    return inherited;
+  };
 
 
   // ItemView
@@ -222,6 +248,6 @@
   });
 
 
-  ItemView.extend = View.extend;
+  ItemView.extend = View.extend = Model.extend = extend;
 
 }(Backbone.Model, Backbone.View));

@@ -133,6 +133,16 @@ _.mixin({
 
 
   /**
+   * Checks whether the value is pure object (neither function nor regex)
+   * @param obj
+   * @returns {boolean}
+   */
+  isPureObject: function (obj) {
+    return Object.prototype.toString.call(obj) === '[object Object]';
+  },
+
+
+  /**
    * Checks whether the value is a valid date
    * That is, the value is both an instance of Date and it represents an actual date.
    * @param {Date} date

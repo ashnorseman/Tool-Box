@@ -90,6 +90,14 @@ describe('underscore-ext', function () {
     expect(_.isPositive(NaN)).to.be.not.ok;
   });
 
+  it('_.isPureObject', function () {
+    expect(_.isPureObject({})).to.be.ok;
+    expect(_.isPureObject(function () {})).to.be.not.ok;
+    expect(_.isPureObject(/a/)).to.be.not.ok;
+    expect(_.isPureObject(null)).to.be.not.ok;
+    expect(_.isPureObject([])).to.be.not.ok;
+  });
+
   it('_.isValidDate', function () {
     expect(_.isValidDate(new Date())).to.be.ok;
     expect(_.isValidDate(new Date(undefined))).to.be.not.ok;

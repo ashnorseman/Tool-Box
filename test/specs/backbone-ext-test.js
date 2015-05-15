@@ -5,6 +5,75 @@
 
 describe('backbone-ext', function () {
 
+  describe('extend', function () {
+
+    it('Model', function () {
+      var Parent = Backbone.Model.extend({
+            defaults: {
+              parent: 'p'
+            }
+          }),
+          Child = Parent.extend({
+            defaults: {
+              child: 'c'
+            }
+          }),
+          child = new Child({
+            option: 'optionStr'
+          });
+
+      expect(child.get('parent')).to.be.equal('p');
+      expect(child.get('child')).to.be.equal('c');
+      expect(child.get('option')).to.be.equal('optionStr');
+    });
+
+    it('overwrites parent function', function () {
+      var Parent = Backbone.Model.extend({
+            initialize: function () {
+              this.set('parent', 'parent');
+            }
+          }),
+          Child = Parent.extend({
+            initialize: function () {
+              this.set('parent', 'p');
+            }
+          }),
+          child = new Child();
+
+      expect(child.get('parent')).to.be.equal('p');
+    });
+
+    it('ItemView', function () {
+      var Parent = Backbone.ItemView.extend({
+            viewEvents: {
+              pve: 'onPve'
+            },
+            onPve: function () {}
+          }),
+          pveSpy = sinon.spy(Parent.prototype, 'onPve'),
+          Child = Parent.extend({
+            viewEvents: {
+              cve: 'onCve'
+            },
+            onCve: function () {}
+          }),
+          cveSpy = sinon.spy(Child.prototype, 'onCve'),
+          child = new Child();
+
+      expect(pveSpy).to.be.not.called;
+      child.trigger('pve', 'p');
+      expect(pveSpy).to.be.calledOnce;
+      expect(pveSpy).to.be.calledOn(child);
+      expect(pveSpy).to.be.calledWith('p');
+
+      expect(cveSpy).to.be.not.called;
+      child.trigger('cve', 'c');
+      expect(cveSpy).to.be.calledOnce;
+      expect(cveSpy).to.be.calledOn(child);
+      expect(cveSpy).to.be.calledWith('c');
+    });
+  });
+
   describe('ItemView', function () {
 
     it('inherits Backbone.View', function () {

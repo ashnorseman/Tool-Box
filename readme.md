@@ -118,6 +118,13 @@ Checks whether the value is a positive number
     @param {number} num
     @returns {boolean}
 
+#### `_.isPureObject(obj)`
+
+Checks whether the value is pure object (neither function nor regex)
+
+    @param obj
+    @returns {boolean}
+
 #### `_.isValidDate(date)`
 
 Checks whether the value is a valid date
@@ -189,6 +196,17 @@ Parse a query string to an object
 
 Backbone Plugin
 ---------------
+
+### .extend
+
+Extends settings objects like `defaults`, `events`, `modelEvents`, `viewEvents`.
+
+Parent methods will be overwritten.
+
+Tested on Model and View. Don't use it on Collection.
+
+    @param {Object} options
+    @returns {Object}
 
 ### Backbone.ItemView
 
