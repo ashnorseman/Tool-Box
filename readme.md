@@ -197,7 +197,7 @@ Parse a query string to an object
 Backbone Plugin
 ---------------
 
-### .extend
+### .extend(options)
 
 Extends settings objects like `defaults`, `events`, `modelEvents`, `viewEvents`.
 
@@ -207,6 +207,14 @@ Tested on Model and View. Don't use it on Collection.
 
     @param {Object} options
     @returns {Object}
+
+### ._super(method, args)
+
+Call parent's method
+
+    @param {string} method
+    @param args
+    @private
 
 ### Backbone.ItemView
 

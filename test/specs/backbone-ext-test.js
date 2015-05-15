@@ -74,6 +74,50 @@ describe('backbone-ext', function () {
     });
   });
 
+  describe('_super', function () {
+
+    it('Model', function () {
+      var Parent = Backbone.Model.extend({
+            initialize: function (options) {
+              this.set('parent', options.parent);
+            }
+          }),
+          Child = Parent.extend({
+            initialize: function () {
+              this._super('initialize', arguments);
+              this.set('child', 'child');
+            }
+          }),
+          child = new Child({
+            parent: 'parent'
+          });
+
+      expect(child.get('parent')).to.be.equal('parent');
+      expect(child.get('child')).to.be.equal('child');
+    });
+
+    it('ItemView', function () {
+      var Parent = Backbone.ItemView.extend({
+            disable: function () {
+              this.parentDisabled = true;
+            }
+          }),
+          Child = Parent.extend({
+            disable: function () {
+              this._super('disable', arguments);
+              this.childDisabled = true;
+            }
+          }),
+          child = new Child({
+            parent: 'parent'
+          });
+
+      child.disable();
+      expect(child.childDisabled).to.be.ok;
+      expect(child.parentDisabled).to.be.ok;
+    });
+  });
+
   describe('ItemView', function () {
 
     it('inherits Backbone.View', function () {

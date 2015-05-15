@@ -11,7 +11,7 @@
 
       oldExtend = Model.extend,
 
-      extend,
+      extend, _super,
 
       ItemView;
 
@@ -35,6 +35,17 @@
     }
 
     return inherited;
+  };
+
+
+  /**
+   * Call parent's method
+   * @param {string} method
+   * @param args
+   * @private
+   */
+  _super = function (method, args) {
+    this.constructor.__super__[method].apply(this, args);
   };
 
 
@@ -248,6 +259,7 @@
   });
 
 
+  ItemView.prototype._super = View.prototype._super = Model.prototype._super = _super;
   ItemView.extend = View.extend = Model.extend = extend;
 
 }(Backbone.Model, Backbone.View));
