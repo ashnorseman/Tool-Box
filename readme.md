@@ -200,6 +200,13 @@ Pad a string with any character to given length
     @param {boolean} [fromRight=false]
     @returns {string}
 
+#### `_.parseNumber(str)`
+
+Parse number in formats like `1,234,567.00` to `1234567`
+
+    @param {string} str
+    @returns {number}
+
 #### `_.parseQuery(queryStr)`
 
 Parse a query string to an object

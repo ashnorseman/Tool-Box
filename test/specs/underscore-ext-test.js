@@ -200,6 +200,13 @@ describe('underscore-ext', function () {
     expect(_.pad(5, 4, '-', true)).to.be.equal('5---');
   });
 
+  it('_.parseNumber', function () {
+    expect(_.parseNumber('1234567')).to.be.equal(1234567);
+    expect(_.parseNumber('123,456,789')).to.be.equal(123456789);
+    expect(_.parseNumber('1,234,567.00')).to.be.equal(1234567);
+    expect(_.parseNumber('-1,234,567.123,456,7')).to.be.equal(-1234567.1234567);
+  });
+
   it('_parseQuery', function () {
     var query = _.parseQuery('?a=b&c=d'),
         simple = _.parseQuery('?e=f'),

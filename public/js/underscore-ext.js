@@ -310,6 +310,16 @@ _.mixin({
 
 
   /**
+   * Parse number in formats like `1,234,567.00` to `1234567`
+   * @param {string} str
+   * @returns {number}
+   */
+  parseNumber: function (str) {
+    return +(str.replace(/,/g, ''));
+  },
+
+
+  /**
    * Parse a query string to an object
    * @param {string} queryStr - like '?a=b&c=d'
    * @returns {Object}
