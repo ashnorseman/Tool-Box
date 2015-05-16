@@ -242,6 +242,17 @@ _.mixin({
 
 
   /**
+   * Convert a string to number if possible.
+   * If the string can be convert to a number, return the number, or return the string.
+   * @param {string} str
+   * @returns {number|string}
+   */
+  num: function (str) {
+    return _.isFinite(str) ? +str : str;
+  },
+
+
+  /**
    * Pad a string with any character to given length
    * @param {string}  str
    * @param {number}  [targetLen=2]

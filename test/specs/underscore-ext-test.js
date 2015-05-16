@@ -173,6 +173,12 @@ describe('underscore-ext', function () {
     expect(isNaN(_.int('px'))).to.be.ok;
   });
 
+  it('_.num', function () {
+    expect(_.num('1.00')).to.be.equal(1);
+    expect(_.num('1.02')).to.be.equal(1.02);
+    expect(_.num('abc')).to.be.equal('abc');
+  });
+
   it('_.pad', function () {
     expect(_.pad(5)).to.be.equal('05');
     expect(_.pad(5, 4)).to.be.equal('0005');
