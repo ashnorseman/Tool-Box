@@ -173,6 +173,20 @@ describe('underscore-ext', function () {
     expect(isNaN(_.int('px'))).to.be.ok;
   });
 
+  it('_.formatNumber', function () {
+    expect(_.formatNumber(1)).to.be.equal('1');
+    expect(_.formatNumber(12)).to.be.equal('12');
+    expect(_.formatNumber(123)).to.be.equal('123');
+    expect(_.formatNumber(1234567)).to.be.equal('1,234,567');
+    expect(_.formatNumber(123456789)).to.be.equal('123,456,789');
+    expect(_.formatNumber(12, 2)).to.be.equal('12.00');
+    expect(_.formatNumber(123.123, 2)).to.be.equal('123.12');
+    expect(_.formatNumber(1234567, 2)).to.be.equal('1,234,567.00');
+    expect(_.formatNumber(1234567.1234567, 6)).to.be.equal('1,234,567.123,457');
+    expect(_.formatNumber(-123456789)).to.be.equal('-123,456,789');
+    expect(_.formatNumber(-1234567.1234567, 6)).to.be.equal('-1,234,567.123,457');
+  });
+
   it('_.num', function () {
     expect(_.num('1.00')).to.be.equal(1);
     expect(_.num('1.02')).to.be.equal(1.02);

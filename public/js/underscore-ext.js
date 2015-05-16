@@ -234,6 +234,37 @@ _.mixin({
 
 
   /**
+   * Format number to styles like '1,234,567.00' or '-1,234,567.00'
+   * @param {number} num
+   * @param {number} digits
+   * @returns {string}
+   */
+  formatNumber: function (num, digits) {
+    var sign = (num + '').slice(0, 1) === '-' ? '-' : '';
+
+    if (digits) num = (+num).toFixed(digits);
+
+    num = (num + '').replace('-', '').split('.');
+
+    // Integer part
+    result = _.reduceRight(num[0], function (res, digit, index) {
+      return ((!((num[0].length - index) % 3) && index) ? ',' : '') + digit + res;
+    }, '');
+
+    // Fractional part
+    if (!_.isUndefined(num[1])) {
+      result += '.';
+
+      result += _.reduce(num[1], function (res, digit, index) {
+        return res + digit + ((index % 3 === 2 && index !== num[1].length - 1) ? ',' : '');
+      }, '');
+    }
+
+    return sign + result;
+  },
+
+
+  /**
    * Safe console.log
    */
   log: function () {

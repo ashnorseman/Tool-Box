@@ -170,10 +170,25 @@ Parse integer based 10
     @param {number} val
     @returns {number}
 
+#### `_.formatNumber(num, digits)`
+
+Format number to styles like '1,234,567.00' or '-1,234,567.00'
+
+    @param {number} num
+    @param {number} digits
+    @returns {string}
+
 #### `_.log()`
 
 Safe console.log
 
+#### `_.num(str)`
+
+Convert a string to number if possible.
+If the string can be convert to a number, return the number, or return the string.
+
+    @param {string} str
+    @returns {number|string}
 
 #### `_.pad(str, targetLen, pad, fromRight)`
 
