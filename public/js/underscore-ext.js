@@ -154,6 +154,16 @@ _.mixin({
 
 
   /**
+   * Checks the string exists and is not empty
+   * @param {string} str
+   * @returns {boolean}
+   */
+  notEmpty: function (str) {
+    return _.exists(str) && (str !== '');
+  },
+
+
+  /**
    * Behaves like _.defaults
    * But will log an error when a key already exists in the destination object
    * @param {any} obj
@@ -241,6 +251,8 @@ _.mixin({
    */
   formatNumber: function (num, digits) {
     var sign = (num + '').slice(0, 1) === '-' ? '-' : '';
+
+    if (_.isNaN(+num)) return '';
 
     if (digits) num = (+num).toFixed(digits);
 

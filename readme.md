@@ -134,6 +134,13 @@ That is, the value is both an instance of Date and it represents an actual date.
     @param {Date} date
     @returns {boolean}
 
+#### `_.notEmpty(str)`
+
+Checks the string exists and is not empty
+
+    @param {string} str
+    @returns {boolean}
+
 #### `_.safeExtendOwn(obj)`
 
 Behaves like _.defaults

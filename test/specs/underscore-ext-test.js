@@ -105,6 +105,13 @@ describe('underscore-ext', function () {
     expect(_.isValidDate(new Date('Ash'))).to.be.not.ok;
   });
 
+  it('_.notEmpty', function () {
+    expect(_.notEmpty('')).to.be.not.ok;
+    expect(_.notEmpty(null)).to.be.not.ok;
+    expect(_.notEmpty(undefined)).to.be.not.ok;
+    expect(_.notEmpty('abc')).to.be.ok;
+  });
+
   it('_.safeExtendOwn', function () {
     var noRep = _.safeExtendOwn({ a: 'a', b: 'b' }, { c: 'c', d: 'd' }),
         hasOld = _.safeExtendOwn({ a: 'a', b: 'b' }, { b: 'c', c: 'c' }),
