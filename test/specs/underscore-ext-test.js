@@ -22,6 +22,11 @@ describe('underscore-ext', function () {
     expect(arr[2]).to.be.equal(2);
   });
 
+  it('_.toArray', function () {
+    expect(_.toArray(1)).to.be.deep.equal([1]);
+    expect(_.toArray([1, 2])).to.be.deep.equal([1, 2]);
+  });
+
   it('_.dayStart', function () {
     var today = new Date(),
         todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate()).valueOf(),

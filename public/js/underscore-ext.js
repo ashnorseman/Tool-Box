@@ -29,6 +29,17 @@ _.mixin({
   },
 
 
+  /**
+   * Pack the argument in an array
+   * Return itself if it is an array.
+   * @param {any} val
+   * @returns {Array}
+   */
+  toArray: function (val) {
+    return _.isArray(val) ? val : [val];
+  },
+
+
   // Dates
   // --------------------------
 

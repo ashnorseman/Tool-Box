@@ -65,6 +65,15 @@ step < 0: move up
     @param {any} item
     @param {number} step
 
+#### `_.toArray(val)`
+
+Pack the argument in an array
+
+Return itself if it is an array.
+
+    @param {any} val
+    @returns {Array}
+
 ### Dates
 
 #### `_.dayStart(timestamp)`
