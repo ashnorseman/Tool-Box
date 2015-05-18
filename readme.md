@@ -53,6 +53,14 @@ Underscore Plugins
 
 ### Arrays
 
+#### `_.defaultsArray(arr, obj)`
+
+Add default values to each of array items
+
+    @param {Array}   arr
+    @param {Object}  obj
+    @returns {Array}
+
 #### `_.moveIndex(arr, item, step)`
 
 Move an item within its parent array

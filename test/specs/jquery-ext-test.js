@@ -1,6 +1,6 @@
 /**
- * Created by Ash.Zhang on 2015/5/8.
- */
+* Created by Ash.Zhang on 2015/5/8.
+*/
 
 
 describe('jquery-ext', function () {

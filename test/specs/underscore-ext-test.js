@@ -1,9 +1,19 @@
 /**
- * Created by Ash.Zhang on 2015/5/7.
- */
+* Created by Ash.Zhang on 2015/5/7.
+*/
 
 
 describe('underscore-ext', function () {
+
+  it('_.defaultsArray', function () {
+    var arrA = [{ name: 'a' }, { value: 'b' }],
+        resA = _.defaultsArray(arrA, { name: 'c', value: 'd' });
+
+    expect(resA[0].name).to.be.equal('a');
+    expect(resA[0].value).to.be.equal('d');
+    expect(resA[1].name).to.be.equal('c');
+    expect(resA[1].value).to.be.equal('b');
+  });
 
   it('_.moveIndex', function () {
     var arr = [1, 2, 3];

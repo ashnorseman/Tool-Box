@@ -1,6 +1,6 @@
 /**
- * Created by Ash.Zhang on 2015/5/12.
- */
+* Created by Ash.Zhang on 2015/5/12.
+*/
 
 
 describe('backbone-ext', function () {

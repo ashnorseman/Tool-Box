@@ -11,6 +11,20 @@ _.mixin({
 
 
   /**
+   * Add default values to each of array items
+   * @param {Array}   arr
+   * @param {Object}  obj
+   * @returns {Array}
+   */
+  defaultsArray: function (arr, obj) {
+
+    return _.each(arr, function (item, i) {
+      arr[i] = _.defaults(item, obj);
+    });
+  },
+
+
+  /**
    * Move an item within its parent array
    * step > 0: move down
    * step < 0: move up
