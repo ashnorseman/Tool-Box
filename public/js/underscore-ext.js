@@ -163,7 +163,7 @@ _.mixin({
    * @returns {boolean}
    */
   isPureObject: function (obj) {
-    return Object.prototype.toString.call(obj) === '[object Object]';
+    return obj && Object.prototype.toString.call(obj) === '[object Object]';
   },
 
 
