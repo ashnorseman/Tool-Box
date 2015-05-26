@@ -63,6 +63,11 @@ module.exports = function (grunt) {
       karma: {
         files: ['public/js/**/*.js', 'test/**/*.js'],
         tasks: ['karma:unit:run']
+      },
+
+      uglify: {
+        files: ['public/js/**/*.js'],
+        tasks: ['uglify']
       }
     }
   });

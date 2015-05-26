@@ -29,6 +29,35 @@ $.fn.extend({
 
 
   /**
+   * Hide loading effect
+   * @returns {jQuery}
+   */
+  hideLoading: function () {
+
+    if (this[0].posStatic) {
+      this[0].style.position = '';
+      delete this[0].posStatic;
+    }
+
+    return this.children('.loading').remove().end();
+  },
+
+
+  /**
+   * Show loading effect (used with css)
+   * @returns {jQuery}
+   */
+  showLoading: function () {
+
+    if (this.css('position') === 'static') {
+      this.css('position', 'relative')[0].posStatic = true;
+    }
+
+    return this.append('<div class="loading"></div>');
+  },
+
+
+  /**
    * Swap two elements
    * Returns the original element.
    * @param {string|HTMLElement|jQuery} el
@@ -85,3 +114,76 @@ $.fn.extend({
     return false;
   }
 });
+
+
+// Events
+// --------------------------
+
+$(function (w, d) {
+  var $d = $(d);
+
+
+  /**
+   * Click on document to close opened elements and its relevant elements
+   */
+  $d.on('click', function (e) {
+
+    $('[data-document-close]').each(function (i, el) {
+      if (e.target === el || $(e.target).isChildOf(el)) return;
+
+      $(el).removeClass('opened');
+      $(el.getAttribute('data-document-close')).removeClass('opened');
+    });
+  });
+
+
+  /**
+   * Enter key shortcut
+   * Hitting enter key on the element will trigger `click` event on relative `data-enter` element.
+   */
+  $d.on('keyup', '[data-enter]', function (e) {
+
+    if (e.which === 13) {
+      $(e.target.getAttribute('data-enter')).trigger('click');
+    }
+  });
+
+
+  /**
+   * Checkbox select-all kit
+   */
+
+  // All
+  $d.on('change', '[data-select-all]', function (e) {
+    var checked = e.target.checked;
+
+    $('[name="' + e.target.getAttribute('data-select-all') + '"]')
+      .filter(checked ? ':not(:checked)' : ':checked')
+      .prop('checked', checked)
+      .trigger('change');
+  });
+
+  // Single
+  $d.on('change', '[data-select]', function (e) {
+    if (e.target.type !== 'checkbox') return;
+
+    $(e.target.getAttribute('data-select'))
+      .prop('checked', !$('[name="' + e.target.name + '"]:not(:checked)').length);
+  });
+
+
+  /**
+   * Toggle Class
+   * Click on the element to toggle classes of other elements.
+   */
+  $d.on('click', '[data-toggle]', function (e) {
+    var $el = $(e.target).closest('[data-toggle]');
+
+    $($el[0].getAttribute('data-toggle'))
+      .toggleClass($el[0].getAttribute('data-toggle-class'));
+
+    // Prevent event conflict
+    e.stopPropagation();
+  });
+
+}(window, document));

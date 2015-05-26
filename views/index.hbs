@@ -1,6 +1,11 @@
-<h2>Center</h2>
+<h2>center</h2>
 
 <!--<div id="center" style="position: absolute; left: 0; top: 0; width: 200px; height: 200px; background: linear-gradient(#f0f0f0, #d0d0d0); background-color: #e0e0e0;"></div>-->
+
+<h2>showLoading / hideLoading</h2>
+
+<div id="loading"></div>
+<div id="loading-abs" style="position: absolute;"></div>
 
 <h2>swapWith</h2>
 
@@ -24,10 +29,36 @@
   </div>
 </div>
 
+<h2>data-enter</h2>
+
+<input type="text" data-enter="#enter"> <button type="button" id="enter">Enter</button>
+
+<h2>data-toggle</h2>
+
+<button type="button" data-toggle="#toggle" data-toggle-class="toggle-class">Toggle</button>
+<p id="toggle">Lorem ipsum dolor sit amet.</p>
+
+<h2>data-document-close</h2>
+
+<p class="opened" data-document-close="#document-close">Close me.</p>
+<p class="opened" id="document-close">Close together.</p>
+
+<h2>data-select-all</h2>
+
+<input type="checkbox" data-select-all="select-all" id="select-all">
+<input type="checkbox" name="select-all" data-select="#select-all">
+<input type="checkbox" name="select-all" data-select="#select-all">
+
 {{#section 'pageScript'}}
   <script>
 //    $('#center').center(50, 50);
 //    $('#center').center();
+
+
+//    $('#loading').showLoading();
+//    $('#loading').hideLoading();
+//    $('#loading-abs').showLoading();
+//    $('#loading-abs').hideLoading();
 
 
 //    $('#swap-1').on('click', function (e) {
@@ -51,5 +82,16 @@
 //    _.log($('#isChildOf-c').isChildOf($('#isChildOf-p')));
 //    _.log($('#isChildOf-c').isChildOf('body'));
 //    _.log($('#isChildOf-c').isChildOf('#isChildOf-no-p'));
+
+    $(function () {
+
+      $('#enter').click(function () {
+        _.log('clicked');
+      });
+
+      $('[name="select-all"]').change(function () {
+        _.log(this);
+      });
+    });
   </script>
 {{/section}}

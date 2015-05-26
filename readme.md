@@ -16,6 +16,18 @@ You can set up margins if the element is larger than screen size.
     @param {number} [marginLeft=0]
     @returns {jQuery}
 
+#### `.hideLoading()`
+
+Hide loading effect (used with css)
+
+    @returns {jQuery}
+
+#### `.showLoading()`
+
+Show loading effect (used with css)
+
+    @returns {jQuery}
+
 #### `.swapWith(el)`
 
 Swap two elements
@@ -45,6 +57,28 @@ Test if an element is the child of another
 
     @param {string|HTMLElement|jQuery} parent
     @returns {boolean}
+
+### Events
+
+#### `[data-document-close="#close"]`
+
+Click on document to close opened elements and its relevant elements
+
+#### `[data-enter="#enter"]`
+
+Enter key shortcut
+
+Hitting enter key on the element will trigger `click` event on relative `data-enter` element.
+
+#### `[data-select-all="select-name"], [data-select="#select-all"]`
+
+Checkbox select-all kit
+
+#### `[data-toggle="#toggle"] [data-toggle-class="toggle-class"]`
+
+Toggle Class
+
+Click on the element to toggle classes of other elements.
 
 * * *
 
