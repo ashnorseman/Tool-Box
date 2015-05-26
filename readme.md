@@ -180,7 +180,10 @@ Snapshots/clones an object deeply
 
 Capitalize a string
 
-    @param {string} str
+Default behavior will not change letters after the first one
+
+    @param {string}  str
+    @param {boolean} lowerRest (lowercase following letters)
     @returns {string}
 
 #### `_.error()`
