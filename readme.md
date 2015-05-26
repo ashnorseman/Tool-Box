@@ -1,6 +1,23 @@
 Tool Box
 ========
 
+Detect Device
+-------------
+
+### Mobile
+
+    window.isMobile         // => true, false
+    $('html')[0].className  // => 'no-mobile', 'mobile'
+
+### Device pixel ratio
+
+    window.dpr      // => 1, 2, 3
+    document.cookie // => 'dpr=1'
+
+### jQuery events
+
+    $.events.click  // => 'click', 'touchend'
+
 jQuery Plugins
 --------------
 

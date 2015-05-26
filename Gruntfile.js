@@ -14,6 +14,7 @@ module.exports = function (grunt) {
       full: {
         files: {
           'public/dist/tool-box.min.js': [
+            'public/js/detect-device.js',
             'public/js/jquery-ext.js',
             'public/js/underscore-ext.js',
             'public/js/backbone-ext.js'
@@ -23,6 +24,7 @@ module.exports = function (grunt) {
       pure: {
         files: {
           'public/dist/tool-box-mini.min.js': [
+            'public/js/detect-device.js',
             'public/js/jquery-ext.js',
             'public/js/underscore-ext.js'
           ]

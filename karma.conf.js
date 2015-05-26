@@ -18,6 +18,7 @@ module.exports = function(config) {
       'public/js/lib/jquery.min.js',
       'public/js/lib/underscore-min.js',
       'public/js/lib/backbone-min.js',
+      'public/js/detect-device.js',
       'public/js/jquery-ext.js',
       'public/js/underscore-ext.js',
       'public/js/backbone-ext.js',

@@ -123,10 +123,16 @@ $(function (w, d) {
   var $d = $(d);
 
 
+  // Different event names for desktop and mobile devices
+  $.events = {
+    click: w.isMobile ? 'touchend' : 'click'
+  };
+
+
   /**
    * Click on document to close opened elements and its relevant elements
    */
-  $d.on('click', function (e) {
+  $d.on($.events.click, function (e) {
 
     $('[data-document-close]').each(function (i, el) {
       if (e.target === el || $(e.target).isChildOf(el)) return;
@@ -176,7 +182,7 @@ $(function (w, d) {
    * Toggle Class
    * Click on the element to toggle classes of other elements.
    */
-  $d.on('click', '[data-toggle]', function (e) {
+  $d.on($.events.click, '[data-toggle]', function (e) {
     var $el = $(e.target).closest('[data-toggle]');
 
     $($el[0].getAttribute('data-toggle'))
