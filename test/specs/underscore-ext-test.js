@@ -185,6 +185,8 @@ describe('underscore-ext', function () {
     expect(_.capitalize(undefined)).to.be.equal('');
     expect(_.capitalize('a')).to.be.equal('A');
     expect(_.capitalize('abc')).to.be.equal('Abc');
+    expect(_.capitalize('aBC')).to.be.equal('ABC');
+    expect(_.capitalize('aBC', true)).to.be.equal('Abc');
     expect(_.capitalize(0)).to.be.equal('0');
   });
 

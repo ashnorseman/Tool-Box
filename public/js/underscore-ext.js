@@ -243,12 +243,15 @@ _.mixin({
 
   /**
    * Capitalize a string
-   * @param {string} str
+   * Default behavior will not change letters after the first one
+   * @param {string}  str
+   * @param {boolean} lowerRest (lowercase following letters)
    * @returns {string}
    */
-  capitalize: function (str) {
+  capitalize: function (str, lowerRest) {
     str = _.exists(str) ? ('' + str) : '';
-    return str.charAt(0).toUpperCase() + str.substring(1).toLowerCase();
+    return str.charAt(0).toLocaleUpperCase() +
+      (lowerRest ? str.substring(1).toLocaleLowerCase() : str.substring(1));
   },
 
 
