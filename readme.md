@@ -73,7 +73,7 @@ step < 0: move up
     @param {any} item
     @param {number} step
 
-#### `_.toArray(val)`
+#### `_.makeArray(val)`
 
 Pack the argument in an array
 

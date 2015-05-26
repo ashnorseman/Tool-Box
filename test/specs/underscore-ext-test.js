@@ -32,9 +32,9 @@ describe('underscore-ext', function () {
     expect(arr[2]).to.be.equal(2);
   });
 
-  it('_.toArray', function () {
-    expect(_.toArray(1)).to.be.deep.equal([1]);
-    expect(_.toArray([1, 2])).to.be.deep.equal([1, 2]);
+  it('_.makeArray', function () {
+    expect(_.makeArray(1)).to.be.deep.equal([1]);
+    expect(_.makeArray([1, 2])).to.be.deep.equal([1, 2]);
   });
 
   it('_.dayStart', function () {

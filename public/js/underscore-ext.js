@@ -25,6 +25,17 @@ _.mixin({
 
 
   /**
+   * Pack the argument in an array
+   * Return itself if it is an array.
+   * @param {any} val
+   * @returns {Array}
+   */
+  makeArray: function (val) {
+    return _.isArray(val) ? val : [val];
+  },
+
+
+  /**
    * Move an item within its parent array
    * step > 0: move down
    * step < 0: move up
@@ -40,17 +51,6 @@ _.mixin({
     newPos = Math.min(Math.max(+step + oldPos, 0), arr.length - 1);
     arr.splice(oldPos, 1);
     arr.splice(newPos, 0, item);
-  },
-
-
-  /**
-   * Pack the argument in an array
-   * Return itself if it is an array.
-   * @param {any} val
-   * @returns {Array}
-   */
-  toArray: function (val) {
-    return _.isArray(val) ? val : [val];
   },
 
 
