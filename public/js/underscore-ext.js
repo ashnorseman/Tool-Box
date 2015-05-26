@@ -97,6 +97,8 @@ _.mixin({
     var date = new Date(timestamp),
         map;
 
+    if (!_.exists(timestamp)) return '';
+
     if (!_.isValidDate(date)) return _.formatTime(new Date(), format);
 
     format = _.isString(format) ? format : 'YYYY-MM-DD';

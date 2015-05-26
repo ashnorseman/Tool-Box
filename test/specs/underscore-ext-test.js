@@ -76,7 +76,7 @@ describe('underscore-ext', function () {
         otherDayStr = '14-1-1 2:5:8',
         otherDayStrFull = '2014-01-01 02:05:08';
 
-    expect(_.formatTime()).to.be.equal(todayStr);
+    expect(_.formatTime()).to.be.equal('');
     expect(_.formatTime(today)).to.be.equal(todayStr);
     expect(_.formatTime(today, 'YYYY-MM-DD HH:mm:ss')).to.be.equal(todayStrFull);
     expect(_.formatTime(otherDay, 'YY-M-D H:m:s')).to.be.equal(otherDayStr);
