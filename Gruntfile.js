@@ -8,15 +8,23 @@ module.exports = function (grunt) {
   grunt.initConfig({
 
     uglify: {
-      out: {
-        options: {
-          preserveComments: false
-        },
+      options: {
+        preserveComments: false
+      },
+      full: {
         files: {
           'public/dist/tool-box.min.js': [
             'public/js/jquery-ext.js',
             'public/js/underscore-ext.js',
             'public/js/backbone-ext.js'
+          ]
+        }
+      },
+      pure: {
+        files: {
+          'public/dist/tool-box-mini.min.js': [
+            'public/js/jquery-ext.js',
+            'public/js/underscore-ext.js'
           ]
         }
       }
