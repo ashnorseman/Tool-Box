@@ -280,5 +280,9 @@ describe('underscore-ext', function () {
     _.setLang('zh');
     expect(_.parseLocale('test')).to.be.equal('测试');
     expect(_.parseLocale('more')).to.be.equal('更多');
+
+    _.setLang('foo');
+    expect(_.parseLocale('test')).to.be.equal('测试');
+    expect(_.parseLocale('more')).to.be.equal('更多');
   });
 });

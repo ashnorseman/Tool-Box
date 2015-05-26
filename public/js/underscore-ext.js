@@ -425,6 +425,11 @@ _.mixin({
    * @param {string} code
    */
   _.setLang = function (code) {
-    langCode = code;
+
+    if (_.hasLang(code)) {
+      langCode = code;
+    } else {
+      _.error('Language code does not exist.');
+    }
   };
 }(_));
