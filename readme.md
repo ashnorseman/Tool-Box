@@ -247,6 +247,13 @@ Add language locale keys
     @param {{code:Object}}   options
     @param {{locale:string}} options.code
 
+#### `_.hasLang(code)`
+
+Test if the language code has data
+
+    @param {string} code
+    @returns {boolean}
+
 #### `_.parseLocale(locale)`
 
 Return a parsed Locale code of current language

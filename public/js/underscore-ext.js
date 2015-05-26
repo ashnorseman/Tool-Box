@@ -396,6 +396,16 @@ _.mixin({
 
 
   /**
+   * Test if the language code has data
+   * @param {string} code
+   * @returns {boolean}
+   */
+  _.hasLang = function (code) {
+    return _.exists(lang[code]);
+  };
+
+
+  /**
    * Return a parsed Locale code of current language
    * @param {string} locale
    * @returns {string}

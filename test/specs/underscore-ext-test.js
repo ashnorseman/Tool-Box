@@ -240,7 +240,10 @@ describe('underscore-ext', function () {
     expect(empty).to.be.deep.equal({});
   });
 
-  it('_.addLang & _.parseLocale', function () {
+  it('_.addLang & _.hasLang & _.parseLocale', function () {
+    expect(_.hasLang('zh')).to.be.not.ok;
+    expect(_.hasLang('en')).to.be.not.ok;
+
     _.addLang({
       en: {
         test: 'Test'
@@ -249,6 +252,9 @@ describe('underscore-ext', function () {
         test: '测试'
       }
     });
+
+    expect(_.hasLang('zh')).to.be.ok;
+    expect(_.hasLang('en')).to.be.ok;
 
     _.setLang('en');
     expect(_.parseLocale('test')).to.be.equal('Test');
