@@ -53,6 +53,23 @@ Underscore Plugins
 
 ### Arrays
 
+#### `_.castArray(val)`
+
+Pack the argument in an array
+
+Return itself if it is an array.
+
+    @param {any} val
+    @returns {Array}
+
+#### `_.createArray(len, defaults)`
+
+Create an array of certain length filled with default values
+
+    @param {number} len
+    @param {any}    defaults
+    @returns {Array}
+
 #### `_.defaultsArray(arr, obj)`
 
 Add default values to each of array items
@@ -72,15 +89,6 @@ step < 0: move up
     @param {Array} arr
     @param {any} item
     @param {number} step
-
-#### `_.makeArray(val)`
-
-Pack the argument in an array
-
-Return itself if it is an array.
-
-    @param {any} val
-    @returns {Array}
 
 ### Dates
 

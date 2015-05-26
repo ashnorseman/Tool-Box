@@ -5,6 +5,17 @@
 
 describe('underscore-ext', function () {
 
+  it('_.castArray', function () {
+    expect(_.castArray(1)).to.be.deep.equal([1]);
+    expect(_.castArray([1, 2])).to.be.deep.equal([1, 2]);
+  });
+
+  it('_.createArray', function () {
+    expect(_.createArray(2, 'a')).to.be.deep.equal(['a', 'a']);
+    expect(_.createArray(3, 9)).to.be.deep.equal([9, 9, 9]);
+    expect(_.createArray(0, 0)).to.be.deep.equal([]);
+  });
+
   it('_.defaultsArray', function () {
     var arrA = [{ name: 'a' }, { value: 'b' }],
         resA = _.defaultsArray(arrA, { name: 'c', value: 'd' });
@@ -30,11 +41,6 @@ describe('underscore-ext', function () {
     expect(arr[0]).to.be.equal(2);
     _.moveIndex(arr, 2, 2);
     expect(arr[2]).to.be.equal(2);
-  });
-
-  it('_.makeArray', function () {
-    expect(_.makeArray(1)).to.be.deep.equal([1]);
-    expect(_.makeArray([1, 2])).to.be.deep.equal([1, 2]);
   });
 
   it('_.dayStart', function () {

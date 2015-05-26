@@ -11,6 +11,30 @@ _.mixin({
 
 
   /**
+   * Pack the argument in an array
+   * Return itself if it is an array.
+   * @param {any} val
+   * @returns {Array}
+   */
+  castArray: function (val) {
+    return _.isArray(val) ? val : [val];
+  },
+
+
+  /**
+   * Create an array of certain length filled with default values
+   * @param {number} len
+   * @param {any}    defaults
+   * @returns {Array}
+   */
+  createArray: function (len, defaults) {
+    return _.map(_.range(len), function () {
+      return defaults;
+    });
+  },
+
+
+  /**
    * Add default values to each of array items
    * @param {Array}   arr
    * @param {Object}  obj
@@ -21,17 +45,6 @@ _.mixin({
     return _.each(arr, function (item, i) {
       arr[i] = _.defaults(item, obj);
     });
-  },
-
-
-  /**
-   * Pack the argument in an array
-   * Return itself if it is an array.
-   * @param {any} val
-   * @returns {Array}
-   */
-  makeArray: function (val) {
-    return _.isArray(val) ? val : [val];
   },
 
 
