@@ -533,5 +533,4 @@ Backbone Module builder.
 Create a Module instance.
 
     @param {Object} options
-    @param {Object} options.data - Model settings
     @returns {ItemView}

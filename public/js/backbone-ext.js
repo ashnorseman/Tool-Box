@@ -327,22 +327,13 @@
     /**
      * Create a Module instance
      * @param {Object} options
-     * @param {Object} options.data - Model settings
      * @returns {ItemView}
      */
     create: function (options) {
-      var model, view;
 
-      options = options || {};
-
-      model = new this.Model(options.data);
-      delete options.data;
-
-      view = new this.View(_.extend({
-        model: model
+      return new this.View(_.extend({
+        model: new this.Model(options)
       }, options));
-
-      return view;
     }
   });
 

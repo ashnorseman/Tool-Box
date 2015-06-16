@@ -436,10 +436,8 @@ describe('backbone-ext', function () {
             }
           }),
           mod = Mod.create({
-            data: {
-              newProp: 'newValue',
-              init: true
-            }
+            newProp: 'newValue',
+            init: true
           });
 
       expect(Mod.Model).to.be.ok;
@@ -476,9 +474,7 @@ describe('backbone-ext', function () {
           }
         }),
         mod = Mod.create({
-          data: {
-            text: 'Link'
-          },
+          text: 'Link',
           viewInit: true
         });
 
