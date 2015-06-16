@@ -446,6 +446,8 @@ Link another view, and listens for its view events and model events
 
 ### Backbone.Module
 
+#### Backbone.Module(options)
+
 Backbone Module builder.
 
     var Mod = Backbone.Module({
@@ -510,13 +512,26 @@ Backbone Module builder.
       }
     });
 
+    @param {Object}    options
+    @param {Object}    options.dataDefaults - Model `defaults`
+    @param {Object}    options.dataHandlers - other Model settings
+    @param {String}    options.template - View template
+    @param {Object}    options.ui - ui hash
+    @param {Function}  options.initialize
+    @param {Function}  options.onInitialize
+    @param {Function}  options.onRender
+    @param {Function}  options.onRemove
+    @param {Object}    options.domEvents
+    @param {Object}    options.domApi
+    @param {Object}    options.modelEvents
+    @param {Object}    options.modelApi
+    @param {Object}    options.viewEvents
+    @param {Object}    options.viewApi
+
+#### Module.create(options)
+
+Create a Module instance.
+
     @param {Object} options
-    @param {Object} options.dataDefaults - Model `defaults`
-    @param {Object} options.dataHandlers - other Model settings
-    @param {Object} options.domEvents
-    @param {Object} options.domApi
-    @param {Object} options.modelEvents
-    @param {Object} options.modelApi
-    @param {Object} options.viewEvents
-    @param {Object} options.viewApi
+    @param {Object} options.data - Model settings
     @returns {ItemView}

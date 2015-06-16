@@ -279,15 +279,21 @@
 
   /**
    * Create a Module (View) easily
-   * @param {Object} options
-   * @param {Object} options.dataDefaults - Model `defaults`
-   * @param {Object} options.dataHandlers - other Model settings
-   * @param {Object} options.domEvents
-   * @param {Object} options.domApi
-   * @param {Object} options.modelEvents
-   * @param {Object} options.modelApi
-   * @param {Object} options.viewEvents
-   * @param {Object} options.viewApi
+   * @param {Object}    options
+   * @param {Object}    options.dataDefaults - Model `defaults`
+   * @param {Object}    options.dataHandlers - other Model settings
+   * @param {String}    options.template - View template
+   * @param {Object}    options.ui - ui hash
+   * @param {Function}  options.initialize
+   * @param {Function}  options.onInitialize
+   * @param {Function}  options.onRender
+   * @param {Function}  options.onRemove
+   * @param {Object}    options.domEvents
+   * @param {Object}    options.domApi
+   * @param {Object}    options.modelEvents
+   * @param {Object}    options.modelApi
+   * @param {Object}    options.viewEvents
+   * @param {Object}    options.viewApi
    * @returns {ItemView}
    * @constructor
    */
@@ -317,6 +323,13 @@
 
   _.extend(Module.prototype, {
 
+
+    /**
+     * Create a Module instance
+     * @param {Object} options
+     * @param {Object} options.data - Model settings
+     * @returns {ItemView}
+     */
     create: function (options) {
       var model, view;
 
