@@ -338,20 +338,12 @@ Backbone Plugin
 
 Extends settings objects like `defaults`, `events`, `modelEvents`, `viewEvents`.
 
-Parent methods will be overwritten.
+Use `this._super()` to call parent's method.
 
 Tested on Model and View. Don't use it on Collection.
 
     @param {Object} options
     @returns {Object}
-
-### ._super(method, args)
-
-Call parent's method
-
-    @param {string} method
-    @param args
-    @private
 
 ### Backbone.ItemView
 
@@ -451,3 +443,80 @@ Link another view, and listens for its view events and model events
     @param {string}                    [options.anotherName]
     @param {string}                    [options.thisName]
     @returns {Backbone.ItemView}
+
+### Backbone.Module
+
+Backbone Module builder.
+
+    var Mod = Backbone.Module({
+
+      // Model settings
+      dataDefaults: {
+        prop: 'value'
+      },
+
+      dataHandlers: {
+        initialize: function (options) {
+          this.init = options.init;
+        }
+      },
+
+      // View settings
+      template: '<a><span><%= text %></span></span></a>',
+
+      initialize: function (options) {
+        this.set('viewInit', options.viewInit);
+      },
+
+      onRender: function () {
+        this.setElement(this.$('a'));
+      },
+
+      ui: {
+        span: 'span'
+      },
+
+      // DOM events
+      domEvents: {
+        click: 'clickLink'
+      },
+
+      domApi: {
+        clickLink: function (e) {
+          this.set('link', this.ui.span.text());
+        }
+      },
+
+      // Model events
+      modelEvents: {
+        'change:link': 'changeLink'
+      },
+
+      modelApi: {
+        changeLink: function (model, value) {
+          this.set('linkChanged', value);
+        }
+      },
+
+      // View events
+      viewEvents: {
+        viewChange: 'viewChange'
+      },
+
+      viewApi: {
+        viewChange: function (value) {
+          this.set('viewChanged', value);
+        }
+      }
+    });
+
+    @param {Object} options
+    @param {Object} options.dataDefaults - Model `defaults`
+    @param {Object} options.dataHandlers - other Model settings
+    @param {Object} options.domEvents
+    @param {Object} options.domApi
+    @param {Object} options.modelEvents
+    @param {Object} options.modelApi
+    @param {Object} options.viewEvents
+    @param {Object} options.viewApi
+    @returns {ItemView}

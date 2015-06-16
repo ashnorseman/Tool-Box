@@ -11,9 +11,13 @@
 
       oldExtend = Model.extend,
 
-      extend, _super,
+      superFnReg = /\b_super\b/,
 
-      ItemView;
+      extend,
+
+      ItemView,
+
+      Module;
 
 
   /**
@@ -25,27 +29,37 @@
    */
   extend = function (options) {
     var inherited = oldExtend.apply(this, arguments),
-        key;
+        key, prop, parentProp;
 
     // Merge options
     for (key in options) if (options.hasOwnProperty(key)) {
-      if (_.isPureObject(options[key]) && _.isPureObject(this.prototype[key])) {
-        inherited.prototype[key] = _.extend({}, this.prototype[key], options[key]);
+      prop = options[key];
+      parentProp = this.prototype[key];
+
+      if (_.isPureObject(prop) && _.isPureObject(parentProp)) {
+
+        // Properties
+        inherited.prototype[key] = _.extend({}, parentProp, prop);
+      } else if (_.isFunction(prop) && superFnReg.test(prop)) {
+
+        // Methods
+        inherited.prototype[key] = (function (fn, superFn) {
+
+          return function () {
+            var tempSuper = this._super,
+                result;
+
+            this._super = superFn;
+            result = fn.apply(this, arguments);
+            this._super = tempSuper;
+
+            return result;
+          };
+        }(prop, parentProp));
       }
     }
 
     return inherited;
-  };
-
-
-  /**
-   * Call parent's method
-   * @param {string} method
-   * @param args
-   * @private
-   */
-  _super = function (method, args) {
-    this.constructor.__super__[method].apply(this, args);
   };
 
 
@@ -63,8 +77,8 @@
   ItemView = Backbone.ItemView = function () {
 
     // Inherits
-    View.apply(this, arguments);
     this.modelShortcut(modelMethods);
+    View.apply(this, arguments);
 
     // Events listening
     this.listenToModelEvents(_.result(this, 'modelEvents'));
@@ -155,13 +169,12 @@
     listenToModelEvents: function (modelEvents, model) {
       var key, method;
 
-      model || (model = this.model);
-      if (!model || !modelEvents) return this;
+      if (!(model || (model = this.model)) || !modelEvents) return this;
 
+      // e.g. { click: 'getData', clear: function () {} }
       for (key in modelEvents) if (modelEvents.hasOwnProperty(key)) {
-        method = modelEvents[key];
-        if (!_.isFunction(method)) method = this[modelEvents[key]];
-        if (method) this.listenTo(model, key, method);
+        if (!_.isFunction(method = modelEvents[key]) && !_.isFunction(method = this[method])) return;
+        this.listenTo(model, key, method);
       }
 
       return this;
@@ -193,9 +206,7 @@
 
         // e.g. { click: 'getData', clear: function () {} }
         for (key in viewEvents) if (viewEvents.hasOwnProperty(key)) {
-          cb = viewEvents[key];
-          if (!_.isFunction(cb)) cb = this[viewEvents[key]];
-          if (!cb) return;
+          if (!_.isFunction(cb = viewEvents[key]) && !_.isFunction(cb = this[cb])) return;
 
           if (view) {
             this.listenTo(view, key, cb); // Listen to another view
@@ -242,24 +253,85 @@
      * @private
      */
     _makeUiShortcuts: function () {
-      var key, $el;
+      var ui = this.ui,
+          key, $el;
 
-      if (!this.ui) return;
+      if (!ui) return;
 
-      for (key in this.ui) if (this.ui.hasOwnProperty(key)) {
-        $el = this.$(this.ui[key]);
+      for (key in ui) if (ui.hasOwnProperty(key)) {
 
-        if ($el.length) {
-          this.ui[key] = $el;
+        if (($el = this.$(ui[key])).length) {
+          ui[key] = $el;
         } else {
-          delete this.ui[key];
+          delete ui[key];
         }
       }
     }
   });
 
 
-  ItemView.prototype._super = View.prototype._super = Model.prototype._super = _super;
   ItemView.extend = View.extend = Model.extend = extend;
+
+
+  // Module Builder
+  // --------------------------
+
+
+  /**
+   * Create a Module (View) easily
+   * @param {Object} options
+   * @param {Object} options.dataDefaults - Model `defaults`
+   * @param {Object} options.dataHandlers - other Model settings
+   * @param {Object} options.domEvents
+   * @param {Object} options.domApi
+   * @param {Object} options.modelEvents
+   * @param {Object} options.modelApi
+   * @param {Object} options.viewEvents
+   * @param {Object} options.viewApi
+   * @returns {ItemView}
+   * @constructor
+   */
+  Module = Backbone.Module = function Module(options) {
+    if (!(this instanceof Module)) return new Module(options);
+
+    options = (options || {});
+
+    options = _.safeExtendOwn({
+      events: options.domEvents
+    }, options, options.domApi, options.modelApi, options.viewApi);
+
+    delete options.domEvents;
+    delete options.domApi;
+    delete options.modelApi;
+    delete options.viewApi;
+
+    this.Model = Model.extend(_.safeExtendOwn({
+      defaults: options.dataDefaults
+    }, options.dataHandlers));
+
+    delete options.dataDefaults;
+    delete options.dataHandlers;
+
+    this.View = ItemView.extend(options);
+  };
+
+  _.extend(Module.prototype, {
+
+    create: function (options) {
+      var model, view;
+
+      options = options || {};
+
+      model = new this.Model(options.data);
+      delete options.data;
+
+      view = new this.View(_.extend({
+        model: model
+      }, options));
+
+      return view;
+    }
+  });
+
 
 }(Backbone.Model, Backbone.View));

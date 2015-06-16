@@ -77,34 +77,48 @@ describe('backbone-ext', function () {
   describe('_super', function () {
 
     it('Model', function () {
-      var Parent = Backbone.Model.extend({
+      var GrandParent = Backbone.Model.extend({
             initialize: function (options) {
+              this.set('grandParent', options.grandParent);
+            }
+          }),
+          Parent = GrandParent.extend({
+            initialize: function (options) {
+              this._super(options);
               this.set('parent', options.parent);
             }
           }),
           Child = Parent.extend({
-            initialize: function () {
-              this._super('initialize', arguments);
+            initialize: function (options) {
+              this._super(options);
               this.set('child', 'child');
             }
           }),
           child = new Child({
+            grandParent: 'grandParent',
             parent: 'parent'
           });
 
+      expect(child.get('grandParent')).to.be.equal('grandParent');
       expect(child.get('parent')).to.be.equal('parent');
       expect(child.get('child')).to.be.equal('child');
     });
 
     it('ItemView', function () {
-      var Parent = Backbone.ItemView.extend({
+      var GrandParent = Backbone.ItemView.extend({
             disable: function () {
+              this.grandParentDisabled = true;
+            }
+          }),
+          Parent = GrandParent.extend({
+            disable: function () {
+              this._super();
               this.parentDisabled = true;
             }
           }),
           Child = Parent.extend({
             disable: function () {
-              this._super('disable', arguments);
+              this._super();
               this.childDisabled = true;
             }
           }),
@@ -115,6 +129,7 @@ describe('backbone-ext', function () {
       child.disable();
       expect(child.childDisabled).to.be.ok;
       expect(child.parentDisabled).to.be.ok;
+      expect(child.grandParentDisabled).to.be.ok;
     });
   });
 
@@ -403,5 +418,117 @@ describe('backbone-ext', function () {
       expect(spyView.firstCall).to.be.calledOn(child);
       expect(spyView.firstCall).returned('sup view change');
     });
+  });
+
+  describe('Module', function () {
+
+    it('creates a Model', function () {
+      var Mod = Backbone.Module({
+
+            dataDefaults: {
+              prop: 'value'
+            },
+
+            dataHandlers: {
+              initialize: function (options) {
+                this.init = options.init;
+              }
+            }
+          }),
+          mod = Mod.create({
+            data: {
+              newProp: 'newValue',
+              init: true
+            }
+          });
+
+      expect(Mod.Model).to.be.ok;
+      expect(mod.model.get('prop')).to.be.equal('value');
+      expect(mod.model.get('newProp')).to.be.equal('newValue');
+      expect(mod.model.init).to.be.ok;
+    });
+  });
+
+  it('creates a View and renders DOM elements', function () {
+    var Mod = Backbone.Module({
+          template: '<a><span><%= text %></span></span></a>',
+
+          initialize: function (options) {
+            this.set('viewInit', options.viewInit);
+          },
+
+          onRender: function () {
+            this.setElement(this.$('a'));
+          },
+
+          ui: {
+            span: 'span'
+          },
+
+          domEvents: {
+            click: 'clickLink'
+          },
+
+          domApi: {
+            clickLink: function (e) {
+              this.set('link', this.ui.span.text());
+            }
+          }
+        }),
+        mod = Mod.create({
+          data: {
+            text: 'Link'
+          },
+          viewInit: true
+        });
+
+    mod.render().$el.appendTo('body');
+
+    expect(Mod.View).to.be.ok;
+    expect(mod.get('viewInit')).to.be.ok;
+
+    mod.$el.click();
+    expect(mod.get('link')).to.be.equal('Link');
+
+    mod.remove();
+  });
+
+  it('creates a View and listens to model events', function () {
+    var Mod = Backbone.Module({
+
+          modelEvents: {
+            'change:link': 'changeLink'
+          },
+
+          modelApi: {
+            changeLink: function (model, value) {
+              this.set('linkChanged', value);
+            }
+          }
+        }),
+        mod = Mod.create();
+
+    mod.set('link', 'Link');
+    expect(mod.get('link')).to.be.equal('Link');
+    expect(mod.get('linkChanged')).to.be.equal('Link');
+  });
+
+  it('creates a View and listens to view events', function () {
+    var Mod = Backbone.Module({
+
+          viewEvents: {
+            viewChange: 'viewChange'
+          },
+
+          viewApi: {
+            viewChange: function (value) {
+              this.set('viewChanged', value);
+            }
+          }
+        }),
+        mod = Mod.create();
+
+    mod.trigger('viewChange', 'new view');
+    expect(mod.get('viewChanged')).to.be.equal('new view');
   });
 });
