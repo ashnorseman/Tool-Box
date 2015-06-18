@@ -5,9 +5,10 @@
 
 (function (Model, View) {
   var modelMethods = ['get', 'set'],
+      collectionMethods = ['add', 'remove', 'reset', 'set', 'get'],
 
-      // Supports `onInitialize`, `onRender`, `onRemove`
-      defaultCallbacks = ['initialize', 'render', 'remove'],
+  // Supports `onInitialize`, `onRender`, `onRemove`
+      defaultCallbacks = ['initialize', 'render', 'remove', 'sort'],
 
       oldExtend = Model.extend,
 
@@ -15,7 +16,7 @@
 
       extend,
 
-      ItemView,
+      ItemView, CollectionView,
 
       Module;
 
@@ -77,11 +78,11 @@
   ItemView = Backbone.ItemView = function () {
 
     // Inherits
-    this.modelShortcut(modelMethods);
+    this.dataShortcut(modelMethods);
     View.apply(this, arguments);
 
     // Events listening
-    this.listenToModelEvents(_.result(this, 'modelEvents'));
+    this.listenToDataEvents(_.result(this, 'modelEvents'));
     this.listenToViewEvents(defaultCallbacks);              // Default
     this.listenToViewEvents(_.result(this, 'viewEvents'));  // Custom
 
@@ -150,9 +151,9 @@
       if (options.holder) anotherView.$el.appendTo(this.$(options.holder));
 
       // Two-way event listening
-      this.listenToModelEvents(options.modelEventsListening, anotherView.model);
+      this.listenToDataEvents(options.modelEventsListening, anotherView.model);
       this.listenToViewEvents(options.viewEventsListening, anotherView);
-      anotherView.listenToModelEvents(options.modelEventsListened, this.model);
+      anotherView.listenToDataEvents(options.modelEventsListened, this.model);
       anotherView.listenToViewEvents(options.viewEventsListened, this);
 
       return this;
@@ -160,21 +161,24 @@
 
 
     /**
-     * Listen to model events map
-     * Like: { modelEvents: { 'change:value': 'render' } }
-     * @param {{event: string|Function}}  modelEvents
-     * @param {Backbone.Model}            [model]
+     * Listen to data events map
+     * Like: { dataEvents: { 'change:value': 'render' } }
+     * @param {{event: string|Function}}            dataEvents
+     * @param {Backbone.Model|Backbone.Collection}  [data]
+     * @param {string}                              [type]
      * @returns {Backbone.ItemView}
      */
-    listenToModelEvents: function (modelEvents, model) {
+    listenToDataEvents: function (dataEvents, data, type) {
       var key, method;
 
-      if (!(model || (model = this.model)) || !modelEvents) return this;
+      type = type || 'model';
+
+      if (!(data || (data = this[type])) || !dataEvents) return this;
 
       // e.g. { click: 'getData', clear: function () {} }
-      for (key in modelEvents) if (modelEvents.hasOwnProperty(key)) {
-        if (!_.isFunction(method = modelEvents[key]) && !_.isFunction(method = this[method])) return;
-        this.listenTo(model, key, method);
+      for (key in dataEvents) if (dataEvents.hasOwnProperty(key)) {
+        if (!_.isFunction(method = dataEvents[key]) && !_.isFunction(method = this[method])) return;
+        this.listenTo(data, key, method);
       }
 
       return this;
@@ -221,16 +225,18 @@
 
 
     /**
-     * Make model methods callable by the view
-     * `this` still refers to the model in methods
-     * @param {[string]} modelMethods
+     * Make model or collection methods callable by the view
+     * `this` still refers to the model or collection in methods
+     * @param {[string]}  methods
+     * @param {string}    type - 'model' or 'collection'
      * @returns {Backbone.ItemView}
      */
-    modelShortcut: function (modelMethods) {
+    dataShortcut: function (methods, type) {
+      type || (type = 'model');
 
-      _.each(modelMethods, function (method) {
+      _.each(methods, function (method) {
         this[method] = function () {
-          if (this.model) return this.model[method].apply(this.model, arguments);
+          if (this[type]) return this[type][method].apply(this[type], arguments);
         }
       }, this);
 
@@ -270,7 +276,178 @@
   });
 
 
-  ItemView.extend = View.extend = Model.extend = extend;
+  // Collection View
+  // --------------------------
+
+
+  /**
+   * Create a CollectionView with given ItemView and Model
+   * @constructor
+   */
+  CollectionView = Backbone.CollectionView = extend.call(ItemView, {
+
+    initialize: function (options) {
+      this.initializing = true;
+      options || (options = {});
+
+      // Sort
+      if (this.sortable) this._initSort();
+
+      // collection data
+      this.collection = new this.constructor.prototype.collection(options.collection);
+      this.dataShortcut(collectionMethods, 'collection');
+      this.listenToDataEvents({
+        add: 'addChild',
+        remove: 'removeChild',
+        reset: 'resetChild'
+      }, this.collection);
+
+      // Generate views
+      this.resetChild();
+
+      this.initializing = false;
+    },
+
+
+    /**
+     * Render the elements
+     * @returns {Backbone.CollectionView}
+     */
+    render: function () {
+      this.$el.empty();
+      this.renderChildren(this.children);
+      this.trigger('render');
+      return this;
+    },
+
+
+    /**
+     * Render an array of views or a single view
+     * @param {[ItemView]|ItemView} views
+     * @returns {Backbone.CollectionView}
+     */
+    renderChildren: function (views) {
+      views = _.castArray(views);
+
+      _.each(views, function (view) {
+        this.$el.append(view.render().$el);
+      }, this);
+
+      return this;
+    },
+
+
+    /**
+     * Init sorting functions
+     * @returns {Backbone.CollectionView}
+     * @private
+     */
+    _initSort: function () {
+      var childProto = this.childView.prototype;
+
+      // jQuery UI api
+      this.$el.sortable({
+        items: '> *',
+        stop: _.bind(this._triggerSort, this)
+      });
+
+      // Extend childView's DOM sort event
+      _.extend((childProto.events = childProto.events || {}), {
+        sort: this._sort
+      });
+
+      return this;
+    },
+
+
+    /**
+     * Trigger sort event from DOM element to views
+     * @param {Event} e
+     * @param {Object} ui
+     * @private
+     */
+    _triggerSort: function (e, ui) {
+      var $item = $(ui.item),
+          newIndex = $item.parent().children().index($item);
+
+      $item.trigger('sort', [newIndex, this]);
+    },
+
+
+    /**
+     * Rearrange models and views
+     * @param {Event}   e
+     * @param {number}  newIndex
+     * @param {Backbone.CollectionView} cv
+     * @private
+     */
+    _sort: function (e, newIndex, cv) {
+      cv.children.splice(newIndex, 1, this);
+      cv.collection.models.splice(newIndex, 1, this.model);
+      cv.trigger('sort', this, newIndex);
+    },
+
+
+    // Children management
+    // -----------------------
+
+
+    /**
+     * Create and add the view of a model
+     * @param {Object} model
+     * @returns {Backbone.CollectionView}
+     */
+    addChild: function (model) {
+      var child = new this.childView({
+        model: model
+      });
+
+      this.children.push(child);
+      this.renderChildren(child);
+      if (_.isFunction(this.onAdd)) this.onAdd.apply(this, arguments);
+
+      return this;
+    },
+
+
+    /**
+     * Remove the view of a model
+     * @param {Object} model
+     * @returns {Backbone.CollectionView}
+     */
+    removeChild: function (model) {
+      this.children = _.without(this.children, model.view);
+      model.view.remove();
+      if (_.isFunction(this.onRemove)) this.onRemove.apply(this, arguments);
+      return this;
+    },
+
+
+    /**
+     * Reset child views
+     * @returns {Backbone.CollectionView}
+     */
+    resetChild: function () {
+      this.children = [];
+
+      this.collection.each(function (model) {
+        this.children.push(new this.childView({
+          model: model
+        }));
+      }, this);
+
+      // Don't render view or trigger reset event on initializing stage
+      if (!this.initializing) {
+        this.render();
+        if (_.isFunction(this.onReset)) this.onReset();
+      }
+
+      return this;
+    }
+  });
+
+
+  CollectionView.extend = ItemView.extend = View.extend = Model.extend = extend;
 
 
   // Module Builder

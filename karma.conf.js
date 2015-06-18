@@ -16,6 +16,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'public/js/lib/jquery.min.js',
+      'public/js/lib/jquery-ui.min.js',
       'public/js/lib/underscore-min.js',
       'public/js/lib/backbone-min.js',
       'public/js/detect-device.js',

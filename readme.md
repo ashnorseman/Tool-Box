@@ -394,23 +394,25 @@ Tested on Model and View. Don't use it on Collection.
 
 These are shortcut methods to the model.
 
-#### `itemView.modelShortcut(modelMethods)`
+#### `itemView.dataShortcut(methods, type)`
 
-Make model methods callable by the view
+Make model or collection methods callable by the view
 
-`this` still refers to the model in methods
+`this` still refers to the model or collection in methods
 
-    @param {[string]} modelMethods
+    @param {[string]} methods
+    @param {string}    type - 'model' or 'collection'
     @returns {Backbone.ItemView}
 
-#### `itemView.listenToModelEvents(modelEvents, model)`
+#### `itemView.listenToDataEvents(dataEvents, model)`
 
-Listen to model events map
+Listen to model or collection events map
 
-Like: { modelEvents: { 'change:value': 'render' } }
+Like: { dataEvents: { 'change:value': 'render' } }
 
-    @param {{event: string|Function}} modelEvents
-    @param {Backbone.Model}           [model]
+    @param {{event: string|Function}} dataEvents
+    @param {Backbone.Model|Backbone.Collection} [data]
+    @param {string} [type]
     @returns {Backbone.ItemView}
 
 #### `itemView.listenToViewEvents(viewEvents, view)`
@@ -443,6 +445,38 @@ Link another view, and listens for its view events and model events
     @param {string}                    [options.anotherName]
     @param {string}                    [options.thisName]
     @returns {Backbone.ItemView}
+
+### Backbone.CollectionView
+
+#### `Backbone.CollectionView.extend()`
+
+    var CV = Backbone.CollectionView.extend({
+      tagName: 'ul',
+      childView: Backbone.ItemView.extend({
+        tagName: 'li',
+        template: '<%= id %>'
+      }),
+      collection: Backbone.Collection.extend({
+        model: Backbone.Model
+      }),
+      sortable: true,
+      onAdd: function (model, collection, prop) { }
+      onRemove: function (model, collection, prop) { }
+      onReset: function () { },
+      onSort: function (view, newIndex) { }
+    }),
+    cv = new CV({
+      collection: [ { id: 1 }, { id: 2 }, { id: 3 } ]
+    });
+
+`childView`: Backbone.ItemView
+`collection`: Backbone.Collection
+`onAdd`, `onRemove`, `onReset`: callbacks
+`sortable` and `onSort`: drag and drop sorting (jQuery UI)
+
+#### collectionView.add(model)
+#### collectionView.remove(model)
+#### collectionView.reset([model1, model2])
 
 ### Backbone.Module
 

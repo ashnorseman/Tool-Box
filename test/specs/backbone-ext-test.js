@@ -420,6 +420,205 @@ describe('backbone-ext', function () {
     });
   });
 
+  describe('CollectionView', function () {
+
+    it('creates a collection view', function () {
+      var CV = Backbone.CollectionView.extend({
+            childView: Backbone.ItemView.extend({
+              template: '<a><%= id %></a>',
+              onRender: function () {
+                this.setElement(this.$('a'));
+              }
+            }),
+            collection: Backbone.Collection.extend({
+              model: Backbone.Model
+            })
+          }),
+          cv = new CV({
+            collection: [ { id: 1 }, { id: 2 } ]
+          }),
+          cve = new CV();
+
+      cv.render();
+      cve.render();
+
+      expect(cv.$('a')).to.be.length(2);
+      expect(cve.$('a')).to.be.length(0);
+      expect(cv.collection).to.be.length(2);
+      expect(cve.collection).to.be.length(0);
+      expect(cv.children).to.be.length(2);
+      expect(cve.children).to.be.length(0);
+    });
+
+    it('creates a collection view', function () {
+      var CV = Backbone.CollectionView.extend({
+            childView: Backbone.ItemView.extend({
+              template: '<a><%= id %></a>',
+              onRender: function () {
+                this.setElement(this.$('a'));
+              }
+            }),
+            collection: Backbone.Collection.extend({
+              model: Backbone.Model
+            })
+          }),
+          cv = new CV({
+            collection: [ { id: 1 }, { id: 2 } ]
+          });
+
+      cv.render();
+
+      cv.add({ id: 3 });
+      expect(cv.children[2].model.get('id')).to.be.equal(3);
+      expect(cv.collection.at(2).get('id')).to.be.equal(3);
+      expect(cv.$('a').eq(2).text()).to.be.equal('3');
+    });
+
+    it('add(model)', function () {
+      var CV = Backbone.CollectionView.extend({
+            childView: Backbone.ItemView.extend({
+              template: '<a><%= id %></a>',
+              onRender: function () {
+                this.setElement(this.$('a'));
+              }
+            }),
+            collection: Backbone.Collection.extend({
+              model: Backbone.Model
+            })
+          }),
+          cv = new CV({
+            collection: [ { id: 1 }, { id: 2 } ]
+          });
+
+      cv.render();
+
+      cv.add({ id: 3 });
+      expect(cv.children[2].model.get('id')).to.be.equal(3);
+      expect(cv.collection.at(2).get('id')).to.be.equal(3);
+      expect(cv.$('a').eq(2).text()).to.be.equal('3');
+    });
+
+    it('remove(model)', function () {
+      var CV = Backbone.CollectionView.extend({
+            childView: Backbone.ItemView.extend({
+              template: '<a><%= id %></a>',
+              onRender: function () {
+                this.setElement(this.$('a'));
+              }
+            }),
+            collection: Backbone.Collection.extend({
+              model: Backbone.Model
+            })
+          }),
+          cv = new CV({
+            collection: [ { id: 1 }, { id: 2 }, { id: 3 } ]
+          });
+
+      cv.render();
+
+      cv.remove({ id: 3 });
+      expect(cv.collection).to.be.length(2);
+      expect(cv.children).to.be.length(2);
+      expect(cv.$('a')).to.be.length(2);
+
+      cv.remove([{ id: 1 }, { id: 2 }]);
+      expect(cv.collection).to.be.length(0);
+      expect(cv.children).to.be.length(0);
+      expect(cv.$('a')).to.be.length(0);
+    });
+
+    it('reset(models)', function () {
+      var CV = Backbone.CollectionView.extend({
+            tagName: 'ul',
+            childView: Backbone.ItemView.extend({
+              tagName: 'li',
+              template: '<%= id %>'
+            }),
+            collection: Backbone.Collection.extend({
+              model: Backbone.Model
+            })
+          }),
+          cv = new CV({
+            collection: [ { id: 1 }, { id: 2 }, { id: 3 } ]
+          });
+
+      cv.render();
+
+      cv.reset([ { id: 4 }, { id: 5 }, { id: 6 } ]);
+      expect(cv.collection).to.be.length(3);
+      expect(cv.collection.at(0).get('id')).to.be.equal(4);
+      expect(cv.children).to.be.length(3);
+      expect(cv.children[0].get('id')).to.be.equal(4);
+      expect(cv.$('li').eq(0).text()).to.be.equal('4');
+    });
+
+    it('onAdd, onRemove, onReset', function () {
+      var addSpy = sinon.spy(),
+          removeSpy = sinon.spy(),
+          resetSpy = sinon.spy(),
+          CV = Backbone.CollectionView.extend({
+            tagName: 'ul',
+            childView: Backbone.ItemView.extend({
+              tagName: 'li',
+              template: '<%= id %>'
+            }),
+            collection: Backbone.Collection.extend({
+              model: Backbone.Model
+            }),
+            onAdd: addSpy,
+            onRemove: removeSpy,
+            onReset: resetSpy
+          }),
+          cv = new CV({
+            collection: [ { id: 1 } ]
+          });
+
+      cv.render();
+
+      cv.add({ id: 2 });
+      expect(addSpy).to.be.calledOnce;
+      expect(addSpy).to.be.calledOn(cv);
+
+      cv.remove({ id: 1 });
+      expect(removeSpy).to.be.calledOnce;
+      expect(removeSpy).to.be.calledOn(cv);
+
+      cv.reset({ id: 3 });
+      expect(resetSpy).to.be.calledOnce;
+      expect(resetSpy).to.be.calledOn(cv);
+    });
+
+    it('drag and sort', function () {
+      var sortSpy = sinon.spy(),
+          CV = Backbone.CollectionView.extend({
+            tagName: 'ul',
+            childView: Backbone.ItemView.extend({
+              tagName: 'li',
+              template: '<%= id %>'
+            }),
+            collection: Backbone.Collection.extend({
+              model: Backbone.Model
+            }),
+            sortable: true,
+            onSort: sortSpy
+          }),
+          cv = new CV({
+            collection: [ { id: 1 }, { id: 2 }, { id: 3 } ]
+          }),
+          $li;
+
+      cv.render();
+      $li = cv.$('li').eq(0);
+      cv.$el.append($li);
+      cv._triggerSort({}, { item: $li[0] });
+
+      expect(sortSpy).to.be.calledOnce;
+      expect(sortSpy).to.be.calledOn(cv);
+      expect(sortSpy.firstCall.args[0]).to.be.equal(cv.children[2]);
+      expect(sortSpy.firstCall.args[1]).to.be.equal(2);
+    });
+  });
+
   describe('Module', function () {
 
     it('creates a Model', function () {
@@ -445,86 +644,86 @@ describe('backbone-ext', function () {
       expect(mod.model.get('newProp')).to.be.equal('newValue');
       expect(mod.model.init).to.be.ok;
     });
-  });
 
-  it('creates a View and renders DOM elements', function () {
-    var Mod = Backbone.Module({
-          template: '<a><span><%= text %></span></span></a>',
+    it('creates a View and renders DOM elements', function () {
+      var Mod = Backbone.Module({
+            template: '<a><span><%= text %></span></span></a>',
 
-          initialize: function (options) {
-            this.set('viewInit', options.viewInit);
-          },
+            initialize: function (options) {
+              this.set('viewInit', options.viewInit);
+            },
 
-          onRender: function () {
-            this.setElement(this.$('a'));
-          },
+            onRender: function () {
+              this.setElement(this.$('a'));
+            },
 
-          ui: {
-            span: 'span'
-          },
+            ui: {
+              span: 'span'
+            },
 
-          domEvents: {
-            click: 'clickLink'
-          },
+            domEvents: {
+              click: 'clickLink'
+            },
 
-          domApi: {
-            clickLink: function (e) {
-              this.set('link', this.ui.span.text());
+            domApi: {
+              clickLink: function (e) {
+                this.set('link', this.ui.span.text());
+              }
             }
-          }
-        }),
-        mod = Mod.create({
-          text: 'Link',
-          viewInit: true
-        });
+          }),
+          mod = Mod.create({
+            text: 'Link',
+            viewInit: true
+          });
 
-    mod.render().$el.appendTo('body');
+      mod.render().$el.appendTo('body');
 
-    expect(Mod.View).to.be.ok;
-    expect(mod.get('viewInit')).to.be.ok;
+      expect(Mod.View).to.be.ok;
+      expect(mod.get('viewInit')).to.be.ok;
 
-    mod.$el.click();
-    expect(mod.get('link')).to.be.equal('Link');
+      mod.$el.click();
+      expect(mod.get('link')).to.be.equal('Link');
 
-    mod.remove();
-  });
+      mod.remove();
+    });
 
-  it('creates a View and listens to model events', function () {
-    var Mod = Backbone.Module({
+    it('creates a View and listens to model events', function () {
+      var Mod = Backbone.Module({
 
-          modelEvents: {
-            'change:link': 'changeLink'
-          },
+            modelEvents: {
+              'change:link': 'changeLink'
+            },
 
-          modelApi: {
-            changeLink: function (model, value) {
-              this.set('linkChanged', value);
+            modelApi: {
+              changeLink: function (model, value) {
+                this.set('linkChanged', value);
+              }
             }
-          }
-        }),
-        mod = Mod.create();
+          }),
+          mod = Mod.create();
 
-    mod.set('link', 'Link');
-    expect(mod.get('link')).to.be.equal('Link');
-    expect(mod.get('linkChanged')).to.be.equal('Link');
-  });
+      mod.set('link', 'Link');
+      expect(mod.get('link')).to.be.equal('Link');
+      expect(mod.get('linkChanged')).to.be.equal('Link');
+    });
 
-  it('creates a View and listens to view events', function () {
-    var Mod = Backbone.Module({
+    it('creates a View and listens to view events', function () {
+      var Mod = Backbone.Module({
 
-          viewEvents: {
-            viewChange: 'viewChange'
-          },
+            viewEvents: {
+              viewChange: 'viewChange'
+            },
 
-          viewApi: {
-            viewChange: function (value) {
-              this.set('viewChanged', value);
+            viewApi: {
+              viewChange: function (value) {
+                this.set('viewChanged', value);
+              }
             }
-          }
-        }),
-        mod = Mod.create();
+          }),
+          mod = Mod.create();
 
-    mod.trigger('viewChange', 'new view');
-    expect(mod.get('viewChanged')).to.be.equal('new view');
+      mod.trigger('viewChange', 'new view');
+      expect(mod.get('viewChanged')).to.be.equal('new view');
+    });
   });
 });
