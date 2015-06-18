@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Tool-box by ashnorseman</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Tool-box</h1>
+      <h2 class="project-tagline">Methods in common use. Supplement to jQuer, Underscore and Backbone.</h2>
+      <a href="https://github.com/ashnorseman/Tool-Box" class="btn">View on GitHub</a>
+      <a href="https://github.com/ashnorseman/Tool-Box/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/ashnorseman/Tool-Box/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h2>
+<a id="detect-device" class="anchor" href="#detect-device" aria-hidden="true"><span class="octicon octicon-link"></span></a>Detect Device</h2>
+
+<h3>
+<a id="mobile" class="anchor" href="#mobile" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mobile</h3>
+
+<pre><code>window.isMobile         // =&gt; true, false
+$('html')[0].className  // =&gt; 'no-mobile', 'mobile'
+</code></pre>
+
+<h3>
+<a id="device-pixel-ratio" class="anchor" href="#device-pixel-ratio" aria-hidden="true"><span class="octicon octicon-link"></span></a>Device pixel ratio</h3>
+
+<pre><code>window.dpr      // =&gt; 1, 2, 3
+document.cookie // =&gt; 'dpr=1'
+</code></pre>
+
+<h3>
+<a id="jquery-events" class="anchor" href="#jquery-events" aria-hidden="true"><span class="octicon octicon-link"></span></a>jQuery events</h3>
+
+<pre><code>$.events.click  // =&gt; 'click', 'touchend'
+</code></pre>
+
+<h2>
+<a id="jquery-plugins" class="anchor" href="#jquery-plugins" aria-hidden="true"><span class="octicon octicon-link"></span></a>jQuery Plugins</h2>
+
+<h3>
+<a id="manipulation" class="anchor" href="#manipulation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Manipulation</h3>
+
+<h4>
+<a id="centermargintop-marginleft" class="anchor" href="#centermargintop-marginleft" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>.center(marginTop, marginLeft)</code>
+</h4>
+
+<p>Place the element at the center of the screen</p>
+
+<p>You can set up margins if the element is larger than screen size.</p>
+
+<pre><code>@param {number} [marginTop=0]
+@param {number} [marginLeft=0]
+@returns {jQuery}
+</code></pre>
+
+<h4>
+<a id="hideloading" class="anchor" href="#hideloading" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>.hideLoading()</code>
+</h4>
+
+<p>Hide loading effect (used with css)</p>
+
+<pre><code>@returns {jQuery}
+</code></pre>
+
+<h4>
+<a id="showloading" class="anchor" href="#showloading" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>.showLoading()</code>
+</h4>
+
+<p>Show loading effect (used with css)</p>
+
+<pre><code>@returns {jQuery}
+</code></pre>
+
+<h4>
+<a id="swapwithel" class="anchor" href="#swapwithel" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>.swapWith(el)</code>
+</h4>
+
+<p>Swap two elements</p>
+
+<p>Returns the original element.</p>
+
+<pre><code>@param {string|HTMLElement|jQuery} el
+@returns {jQuery}
+</code></pre>
+
+<h3>
+<a id="offset" class="anchor" href="#offset" aria-hidden="true"><span class="octicon octicon-link"></span></a>Offset</h3>
+
+<h4>
+<a id="coverpointx-y" class="anchor" href="#coverpointx-y" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>.coverPoint(x, y)</code>
+</h4>
+
+<p>Test if an element covers the coordinate point (x, y)</p>
+
+<p>x, y are relative to document.</p>
+
+<pre><code>@param {number} x
+@param {number} y
+@returns {boolean}
+</code></pre>
+
+<h3>
+<a id="traversing" class="anchor" href="#traversing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Traversing</h3>
+
+<h4>
+<a id="ischildofparent" class="anchor" href="#ischildofparent" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>.isChildOf(parent)</code>
+</h4>
+
+<p>Test if an element is the child of another</p>
+
+<pre><code>@param {string|HTMLElement|jQuery} parent
+@returns {boolean}
+</code></pre>
+
+<h3>
+<a id="events" class="anchor" href="#events" aria-hidden="true"><span class="octicon octicon-link"></span></a>Events</h3>
+
+<h4>
+<a id="data-document-closeclose" class="anchor" href="#data-document-closeclose" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>[data-document-close="#close"]</code>
+</h4>
+
+<p>Click on document to close opened elements and its relevant elements</p>
+
+<h4>
+<a id="data-enterenter" class="anchor" href="#data-enterenter" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>[data-enter="#enter"]</code>
+</h4>
+
+<p>Enter key shortcut</p>
+
+<p>Hitting enter key on the element will trigger <code>click</code> event on relative <code>data-enter</code> element.</p>
+
+<h4>
+<a id="data-select-allselect-name-data-selectselect-all" class="anchor" href="#data-select-allselect-name-data-selectselect-all" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>[data-select-all="select-name"], [data-select="#select-all"]</code>
+</h4>
+
+<p>Checkbox select-all kit</p>
+
+<h4>
+<a id="data-toggletoggle-data-toggle-classtoggle-class" class="anchor" href="#data-toggletoggle-data-toggle-classtoggle-class" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>[data-toggle="#toggle"] [data-toggle-class="toggle-class"]</code>
+</h4>
+
+<p>Toggle Class</p>
+
+<p>Click on the element to toggle classes of other elements.</p>
+
+<hr>
+
+<h2>
+<a id="underscore-plugins" class="anchor" href="#underscore-plugins" aria-hidden="true"><span class="octicon octicon-link"></span></a>Underscore Plugins</h2>
+
+<h3>
+<a id="arrays" class="anchor" href="#arrays" aria-hidden="true"><span class="octicon octicon-link"></span></a>Arrays</h3>
+
+<h4>
+<a id="_castarrayval" class="anchor" href="#_castarrayval" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.castArray(val)</code>
+</h4>
+
+<p>Pack the argument in an array</p>
+
+<p>Return itself if it is an array.</p>
+
+<pre><code>@param {any} val
+@returns {Array}
+</code></pre>
+
+<h4>
+<a id="_createarraylen-defaults" class="anchor" href="#_createarraylen-defaults" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.createArray(len, defaults)</code>
+</h4>
+
+<p>Create an array of certain length filled with default values</p>
+
+<pre><code>@param {number} len
+@param {any}    defaults
+@returns {Array}
+</code></pre>
+
+<h4>
+<a id="_defaultsarrayarr-obj" class="anchor" href="#_defaultsarrayarr-obj" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.defaultsArray(arr, obj)</code>
+</h4>
+
+<p>Add default values to each of array items</p>
+
+<pre><code>@param {Array}   arr
+@param {Object}  obj
+@returns {Array}
+</code></pre>
+
+<h4>
+<a id="_moveindexarr-item-step" class="anchor" href="#_moveindexarr-item-step" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.moveIndex(arr, item, step)</code>
+</h4>
+
+<p>Move an item within its parent array</p>
+
+<p>step &gt; 0: move down</p>
+
+<p>step &lt; 0: move up</p>
+
+<pre><code>@param {Array} arr
+@param {any} item
+@param {number} step
+</code></pre>
+
+<h3>
+<a id="dates" class="anchor" href="#dates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dates</h3>
+
+<h4>
+<a id="_daystarttimestamp" class="anchor" href="#_daystarttimestamp" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.dayStart(timestamp)</code>
+</h4>
+
+<p>The start point (0 millisecond) of a day</p>
+
+<pre><code>@param {number|Date} timestamp
+@returns {number}
+</code></pre>
+
+<h4>
+<a id="_dayendtimestamp" class="anchor" href="#_dayendtimestamp" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.dayEnd(timestamp)</code>
+</h4>
+
+<p>The end point (last millisecond) of a day</p>
+
+<pre><code>@param {number|Date} timestamp
+@returns {number}
+</code></pre>
+
+<h4>
+<a id="_formattimetimestamp-format" class="anchor" href="#_formattimetimestamp-format" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.formatTime(timestamp, format)</code>
+</h4>
+
+<p>Format a date to a string</p>
+
+<p>Supports: YYYY, YY, MM, M, DD, D, HH, H, mm, m, ss, s</p>
+
+<pre><code>@param {number|Date} timestamp
+@param {string}      [format='YYYY-MM-DD']
+@returns {string}
+</code></pre>
+
+<h3>
+<a id="objects" class="anchor" href="#objects" aria-hidden="true"><span class="octicon octicon-link"></span></a>Objects</h3>
+
+<h4>
+<a id="_existsval" class="anchor" href="#_existsval" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.exists(val)</code>
+</h4>
+
+<p>Checks whether or not the value is "existy"</p>
+
+<p>Both null and undefined are considered non-existy values.</p>
+
+<p>All other values are existy.</p>
+
+<pre><code>@param {any} val
+@returns {boolean}
+</code></pre>
+
+<h4>
+<a id="_isnegativenum" class="anchor" href="#_isnegativenum" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.isNegative(num)</code>
+</h4>
+
+<p>Checks whether the value is a negative number</p>
+
+<pre><code>@param {number} num
+@returns {boolean}
+</code></pre>
+
+<h4>
+<a id="_ispositivenum" class="anchor" href="#_ispositivenum" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.isPositive(num)</code>
+</h4>
+
+<p>Checks whether the value is a positive number</p>
+
+<pre><code>@param {number} num
+@returns {boolean}
+</code></pre>
+
+<h4>
+<a id="_ispureobjectobj" class="anchor" href="#_ispureobjectobj" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.isPureObject(obj)</code>
+</h4>
+
+<p>Checks whether the value is pure object (neither function nor regex)</p>
+
+<pre><code>@param obj
+@returns {boolean}
+</code></pre>
+
+<h4>
+<a id="_isvaliddatedate" class="anchor" href="#_isvaliddatedate" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.isValidDate(date)</code>
+</h4>
+
+<p>Checks whether the value is a valid date</p>
+
+<p>That is, the value is both an instance of Date and it represents an actual date.</p>
+
+<pre><code>@param {Date} date
+@returns {boolean}
+</code></pre>
+
+<h4>
+<a id="_notemptystr" class="anchor" href="#_notemptystr" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.notEmpty(str)</code>
+</h4>
+
+<p>Checks the string exists and is not empty</p>
+
+<pre><code>@param {string} str
+@returns {boolean}
+</code></pre>
+
+<h4>
+<a id="_safeextendownobj" class="anchor" href="#_safeextendownobj" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.safeExtendOwn(obj)</code>
+</h4>
+
+<p>Behaves like _.defaults</p>
+
+<p>But will log an error when a key already exists in the destination object</p>
+
+<pre><code>@param {any} obj
+@returns {any}
+</code></pre>
+
+<h4>
+<a id="_snapshotobj" class="anchor" href="#_snapshotobj" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.snapshot(obj)</code>
+</h4>
+
+<p>Snapshots/clones an object deeply</p>
+
+<pre><code>@param {Object} obj
+@returns {Object}
+</code></pre>
+
+<h3>
+<a id="utility" class="anchor" href="#utility" aria-hidden="true"><span class="octicon octicon-link"></span></a>Utility</h3>
+
+<h4>
+<a id="_capitalizestr" class="anchor" href="#_capitalizestr" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.capitalize(str)</code>
+</h4>
+
+<p>Capitalize a string</p>
+
+<p>Default behavior will not change letters after the first one</p>
+
+<pre><code>@param {string}  str
+@param {boolean} lowerRest (lowercase following letters)
+@returns {string}
+</code></pre>
+
+<h4>
+<a id="_error" class="anchor" href="#_error" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.error()</code>
+</h4>
+
+<p>Safe console.error</p>
+
+<h4>
+<a id="_intval" class="anchor" href="#_intval" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.int(val)</code>
+</h4>
+
+<p>Parse integer based 10</p>
+
+<pre><code>@param {number} val
+@returns {number}
+</code></pre>
+
+<h4>
+<a id="_formatnumbernum-digits" class="anchor" href="#_formatnumbernum-digits" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.formatNumber(num, digits)</code>
+</h4>
+
+<p>Format number to styles like '1,234,567.00' or '-1,234,567.00'</p>
+
+<pre><code>@param {number} num
+@param {number} digits
+@returns {string}
+</code></pre>
+
+<h4>
+<a id="_log" class="anchor" href="#_log" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.log()</code>
+</h4>
+
+<p>Safe console.log</p>
+
+<h4>
+<a id="_numstr" class="anchor" href="#_numstr" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.num(str)</code>
+</h4>
+
+<p>Convert a string to number if possible.
+If the string can be convert to a number, return the number, or return the string.</p>
+
+<pre><code>@param {string} str
+@returns {number|string}
+</code></pre>
+
+<h4>
+<a id="_padstr-targetlen-pad-fromright" class="anchor" href="#_padstr-targetlen-pad-fromright" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.pad(str, targetLen, pad, fromRight)</code>
+</h4>
+
+<p>Pad a string with any character to given length</p>
+
+<pre><code>@param {string}  str
+@param {number}  [targetLen=2]
+@param {string}  [pad='0']
+@param {boolean} [fromRight=false]
+@returns {string}
+</code></pre>
+
+<h4>
+<a id="_parsenumberstr" class="anchor" href="#_parsenumberstr" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.parseNumber(str)</code>
+</h4>
+
+<p>Parse number in formats like <code>1,234,567.00</code> to <code>1234567</code></p>
+
+<pre><code>@param {string} str
+@returns {number}
+</code></pre>
+
+<h4>
+<a id="_parsequeryquerystr" class="anchor" href="#_parsequeryquerystr" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.parseQuery(queryStr)</code>
+</h4>
+
+<p>Parse a query string to an object</p>
+
+<pre><code>@param {string} queryStr - like '?a=b&amp;c=d'
+@returns {Object}
+</code></pre>
+
+<h3>
+<a id="language" class="anchor" href="#language" aria-hidden="true"><span class="octicon octicon-link"></span></a>Language</h3>
+
+<h4>
+<a id="_addlangoptions" class="anchor" href="#_addlangoptions" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.addLang(options)</code>
+</h4>
+
+<p>Add language locale keys</p>
+
+<pre><code>@param {{code:Object}}   options
+@param {{locale:string}} options.code
+</code></pre>
+
+<h4>
+<a id="_haslangcode" class="anchor" href="#_haslangcode" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.hasLang(code)</code>
+</h4>
+
+<p>Test if the language code has data</p>
+
+<pre><code>@param {string} code
+@returns {boolean}
+</code></pre>
+
+<h4>
+<a id="_parselocalelocale" class="anchor" href="#_parselocalelocale" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.parseLocale(locale)</code>
+</h4>
+
+<p>Return a parsed Locale code of current language</p>
+
+<pre><code>@param {string} locale
+@returns {string}
+</code></pre>
+
+<h4>
+<a id="_setlangcode" class="anchor" href="#_setlangcode" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.setLang(code)</code>
+</h4>
+
+<p>Set langCode</p>
+
+<pre><code>@param {string} code
+</code></pre>
+
+<hr>
+
+<h2>
+<a id="backbone-plugin" class="anchor" href="#backbone-plugin" aria-hidden="true"><span class="octicon octicon-link"></span></a>Backbone Plugin</h2>
+
+<h3>
+<a id="extendoptions" class="anchor" href="#extendoptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>.extend(options)</h3>
+
+<p>Extends settings objects like <code>defaults</code>, <code>events</code>, <code>modelEvents</code>, <code>viewEvents</code>.</p>
+
+<p>Use <code>this._super()</code> to call parent's method.</p>
+
+<p>Tested on Model and View. Don't use it on Collection.</p>
+
+<pre><code>@param {Object} options
+@returns {Object}
+</code></pre>
+
+<h3>
+<a id="backboneitemview" class="anchor" href="#backboneitemview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Backbone.ItemView</h3>
+
+<h4>
+<a id="backboneitemviewextend" class="anchor" href="#backboneitemviewextend" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>Backbone.ItemView.extend()</code>
+</h4>
+
+<pre><code>Backbone.ItemView.extend({
+  template: '&lt;div class="data"&gt;&lt;%= attr %&gt;&lt;/div&gt;',
+
+  ui: {
+    data: '.data'
+  },
+
+  events: {
+    'click .data': 'onClickData'
+  },
+
+  modelEvents: {
+    change: 'onModelChange'
+  },
+
+  viewEvents: {
+    clear: 'onViewChange'
+  },
+
+  onInitialize: function () {},
+  onRender: function () {},
+  onRemove: function () {},
+
+  onClickData: function () {},
+
+  onModelChange: function () {},
+
+  onViewChange: function () {}
+});
+</code></pre>
+
+<p><code>ui</code>: elements saved at <code>this.ui.data</code></p>
+
+<p><code>modelEvents</code>: model events listened</p>
+
+<p><code>viewEvents</code>: view events listened</p>
+
+<p><code>onInitialize, onRender, onRemove</code>: callbacks fired after <code>initialize, render, remove</code></p>
+
+<h4>
+<a id="itemviewget" class="anchor" href="#itemviewget" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>itemView.get()</code>
+</h4>
+
+<h4>
+<a id="itemviewset" class="anchor" href="#itemviewset" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>itemView.set()</code>
+</h4>
+
+<h4>
+<a id="itemviewunset" class="anchor" href="#itemviewunset" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>itemView.unset()</code>
+</h4>
+
+<h4>
+<a id="itemviewclear" class="anchor" href="#itemviewclear" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>itemView.clear()</code>
+</h4>
+
+<p>These are shortcut methods to the model.</p>
+
+<h4>
+<a id="itemviewdatashortcutmethods-type" class="anchor" href="#itemviewdatashortcutmethods-type" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>itemView.dataShortcut(methods, type)</code>
+</h4>
+
+<p>Make model or collection methods callable by the view</p>
+
+<p><code>this</code> still refers to the model or collection in methods</p>
+
+<pre><code>@param {[string]} methods
+@param {string}    type - 'model' or 'collection'
+@returns {Backbone.ItemView}
+</code></pre>
+
+<h4>
+<a id="itemviewlistentodataeventsdataevents-model" class="anchor" href="#itemviewlistentodataeventsdataevents-model" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>itemView.listenToDataEvents(dataEvents, model)</code>
+</h4>
+
+<p>Listen to model or collection events map</p>
+
+<p>Like: { dataEvents: { 'change:value': 'render' } }</p>
+
+<pre><code>@param {{event: string|Function}} dataEvents
+@param {Backbone.Model|Backbone.Collection} [data]
+@param {string} [type]
+@returns {Backbone.ItemView}
+</code></pre>
+
+<h4>
+<a id="itemviewlistentovieweventsviewevents-view" class="anchor" href="#itemviewlistentovieweventsviewevents-view" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>itemView.listenToViewEvents(viewEvents, view)</code>
+</h4>
+
+<p>Listen to view events map</p>
+
+<p><code>viewEvents</code> can be an array or a map</p>
+
+<p>An array will auto generate callbacks like <code>render</code> -&gt; <code>onRender</code></p>
+
+<pre><code>@param {[string]|{event: string|Function}}  viewEvents
+@param {Backbone.View}                      [view]
+@returns {Backbone.ItemView}
+</code></pre>
+
+<h4>
+<a id="itemviewlinkviewanotherview-options" class="anchor" href="#itemviewlinkviewanotherview-options" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>itemView.linkView(anotherView, options)</code>
+</h4>
+
+<p>Link another view, and listens for its view events and model events</p>
+
+<p><code>~EventsListening</code> means listen to another view or its model's events</p>
+
+<p><code>~EventsListened</code> means another view is listening to this view or its models events</p>
+
+<pre><code>@param {Backbone.ItemView}         anotherView
+@param {Object}                    options
+@param {string|jQuery|HTMLElement} options.holder (effective after parent render)
+@param {object}                    options.modelEventsListening
+@param {object}                    options.viewEventsListening
+@param {object}                    options.modelEventsListened
+@param {object}                    options.viewEventsListened
+@param {string}                    [options.anotherName]
+@param {string}                    [options.thisName]
+@returns {Backbone.ItemView}
+</code></pre>
+
+<h3>
+<a id="backbonecollectionview" class="anchor" href="#backbonecollectionview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Backbone.CollectionView</h3>
+
+<h4>
+<a id="backbonecollectionviewextend" class="anchor" href="#backbonecollectionviewextend" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>Backbone.CollectionView.extend()</code>
+</h4>
+
+<pre><code>var CV = Backbone.CollectionView.extend({
+  tagName: 'ul',
+  childView: Backbone.ItemView.extend({
+    tagName: 'li',
+    template: '&lt;%= id %&gt;'
+  }),
+  collection: Backbone.Collection.extend({
+    model: Backbone.Model
+  }),
+  sortable: true,
+  onAdd: function (model, collection, prop) { }
+  onRemove: function (model, collection, prop) { }
+  onReset: function () { },
+  onSort: function (view, newIndex) { }
+}),
+cv = new CV({
+  collection: [ { id: 1 }, { id: 2 }, { id: 3 } ]
+});
+</code></pre>
+
+<p><code>childView</code>: Backbone.ItemView</p>
+
+<p><code>collection</code>: Backbone.Collection</p>
+
+<p><code>onAdd</code>, <code>onRemove</code>, <code>onReset</code>: callbacks</p>
+
+<p><code>sortable</code> and <code>onSort</code>: drag and drop sorting (jQuery UI)</p>
+
+<h4>
+<a id="collectionviewaddmodel" class="anchor" href="#collectionviewaddmodel" aria-hidden="true"><span class="octicon octicon-link"></span></a>collectionView.add(model)</h4>
+
+<h4>
+<a id="collectionviewremovemodel" class="anchor" href="#collectionviewremovemodel" aria-hidden="true"><span class="octicon octicon-link"></span></a>collectionView.remove(model)</h4>
+
+<h4>
+<a id="collectionviewresetmodel1-model2" class="anchor" href="#collectionviewresetmodel1-model2" aria-hidden="true"><span class="octicon octicon-link"></span></a>collectionView.reset([model1, model2])</h4>
+
+<h3>
+<a id="backbonemodule" class="anchor" href="#backbonemodule" aria-hidden="true"><span class="octicon octicon-link"></span></a>Backbone.Module</h3>
+
+<h4>
+<a id="backbonemoduleoptions" class="anchor" href="#backbonemoduleoptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Backbone.Module(options)</h4>
+
+<p>Backbone Module builder.</p>
+
+<pre><code>var Mod = Backbone.Module({
+
+  // Model settings
+  dataDefaults: {
+    prop: 'value'
+  },
+
+  dataHandlers: {
+    initialize: function (options) {
+      this.init = options.init;
+    }
+  },
+
+  // View settings
+  template: '&lt;a&gt;&lt;span&gt;&lt;%= text %&gt;&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;',
+
+  initialize: function (options) {
+    this.set('viewInit', options.viewInit);
+  },
+
+  onRender: function () {
+    this.setElement(this.$('a'));
+  },
+
+  ui: {
+    span: 'span'
+  },
+
+  // DOM events
+  domEvents: {
+    click: 'clickLink'
+  },
+
+  domApi: {
+    clickLink: function (e) {
+      this.set('link', this.ui.span.text());
+    }
+  },
+
+  // Model events
+  modelEvents: {
+    'change:link': 'changeLink'
+  },
+
+  modelApi: {
+    changeLink: function (model, value) {
+      this.set('linkChanged', value);
+    }
+  },
+
+  // View events
+  viewEvents: {
+    viewChange: 'viewChange'
+  },
+
+  viewApi: {
+    viewChange: function (value) {
+      this.set('viewChanged', value);
+    }
+  }
+});
+
+@param {Object}    options
+@param {Object}    options.dataDefaults - Model `defaults`
+@param {Object}    options.dataHandlers - other Model settings
+@param {String}    options.template - View template
+@param {Object}    options.ui - ui hash
+@param {Function}  options.initialize
+@param {Function}  options.onInitialize
+@param {Function}  options.onRender
+@param {Function}  options.onRemove
+@param {Object}    options.domEvents
+@param {Object}    options.domApi
+@param {Object}    options.modelEvents
+@param {Object}    options.modelApi
+@param {Object}    options.viewEvents
+@param {Object}    options.viewApi
+</code></pre>
+
+<h4>
+<a id="modulecreateoptions" class="anchor" href="#modulecreateoptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Module.create(options)</h4>
+
+<p>Create a Module instance.</p>
+
+<pre><code>@param {Object} options
+@returns {ItemView}
+</code></pre>
+
+<h3>
+<a id="backbonelistmodule" class="anchor" href="#backbonelistmodule" aria-hidden="true"><span class="octicon octicon-link"></span></a>Backbone.ListModule</h3>
+
+<h4>
+<a id="backbonelistmoduleoptions" class="anchor" href="#backbonelistmoduleoptions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Backbone.ListModule(options)</h4>
+
+<p>Backbone ListModule builder.</p>
+
+<pre><code>var Mod = Backbone.ListModule({
+
+  // Model settings
+  dataDefaults: {
+    prop: 'value'
+  },
+
+  dataHandlers: {
+    initialize: function (options) {
+      this.init = options.init;
+    }
+  },
+
+  // View settings
+  tagName: 'ul',
+  template: '&lt;%= id %&gt;',
+  sortable: true,
+
+  // ItemView settings
+  itemSettings: {
+    tagName: 'li',
+    template: '&lt;%= id %&gt;',
+
+    domEvents: {
+      click: function (e) { }
+    },
+
+    modelEvents: {
+      change: function (model, value) { }
+    },
+
+    viewEvents: {
+      viewChange: function (value) { }
+    }
+  }
+});
+
+@param {Object}    options
+@param {Object}    options.itemSettings - ItemView settings
+</code></pre>
+
+<h4>
+<a id="listmodulecreatecollection" class="anchor" href="#listmodulecreatecollection" aria-hidden="true"><span class="octicon octicon-link"></span></a>ListModule.create(collection)</h4>
+
+<p>Create a ListModule instance.</p>
+
+<pre><code>@param {[Object]} collection
+@returns {CollectionView}
+
+var list = List.create([ { id: 1 }, { id: 2 } ]);
+
+list.children   // =&gt; [ItemView]
+list.collection // =&gt; Backbone.Collection
+</code></pre>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/ashnorseman/Tool-Box">Tool-box</a> is maintained by <a href="https://github.com/ashnorseman">ashnorseman</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
+
