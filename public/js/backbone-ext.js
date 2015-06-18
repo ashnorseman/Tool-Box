@@ -3,7 +3,7 @@
  */
 
 
-(function (Model, View) {
+(function (Model, Collection, View) {
   var modelMethods = ['get', 'set'],
       collectionMethods = ['add', 'remove', 'reset', 'set', 'get'],
 
@@ -402,9 +402,14 @@
         model: model
       });
 
+      child.parent = this;
       this.children.push(child);
-      this.renderChildren(child);
-      if (_.isFunction(this.onAdd)) this.onAdd.apply(this, arguments);
+
+      // Don't render the view or execute add callback when resetting
+      if (!this.resetting) {
+        this.renderChildren(child);
+        if (_.isFunction(this.onAdd)) this.onAdd.apply(this, arguments);
+      }
 
       return this;
     },
@@ -428,12 +433,11 @@
      * @returns {Backbone.CollectionView}
      */
     resetChild: function () {
+      this.resetting = true;
       this.children = [];
 
       this.collection.each(function (model) {
-        this.children.push(new this.childView({
-          model: model
-        }));
+        this.addChild(model);
       }, this);
 
       // Don't render view or trigger reset event on initializing stage
@@ -441,6 +445,8 @@
         this.render();
         if (_.isFunction(this.onReset)) this.onReset();
       }
+
+      this.resetting = false;
 
       return this;
     }
@@ -477,7 +483,7 @@
   Module = Backbone.Module = function Module(options) {
     if (!(this instanceof Module)) return new Module(options);
 
-    options = (options || {});
+    options || (options = {});
 
     options = _.safeExtendOwn({
       events: options.domEvents
@@ -515,4 +521,69 @@
   });
 
 
-}(Backbone.Model, Backbone.View));
+  // ListModule
+  // -------------------------
+
+  /**
+   * Create a ListModule (View) easily
+   * @param {Object}    options - CollectionView settings
+   * @param {Object}    options.itemSettings - ItemView settings
+   * @returns {CollectionView}
+   * @constructor
+   */
+  ListModule = Backbone.ListModule = function (options) {
+    if (!(this instanceof ListModule)) return new ListModule(options);
+
+    options || (options = {});
+
+    // Model
+    this.Model = Model.extend(_.safeExtendOwn({
+      defaults: options.dataDefaults
+    }, options.dataHandlers));
+
+    delete options.dataDefaults;
+    delete options.dataHandlers;
+
+    // Collection
+    this.Collection = Collection.extend({
+      model: this.Model
+    });
+
+    // Child views
+    this.ChildView = Module(options.itemSettings).View;
+    delete options.itemSettings;
+
+    // View
+    options = _.safeExtendOwn({
+      childView: this.ChildView,
+      collection: this.Collection,
+      events: options.domEvents
+    }, options, options.domApi, options.modelApi, options.viewApi);
+
+    delete options.domEvents;
+    delete options.domApi;
+    delete options.modelApi;
+    delete options.viewApi;
+
+    this.View = CollectionView.extend(options);
+  };
+
+
+  _.extend(ListModule.prototype, {
+
+
+    /**
+     * Create a ListModule instance
+     * @param {[Object]} collection
+     * @returns {CollectionView}
+     */
+    create: function (collection) {
+
+      return new this.View({
+        collection: collection
+      });
+    }
+  });
+
+
+}(Backbone.Model, Backbone.Collection, Backbone.View));

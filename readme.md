@@ -470,8 +470,11 @@ Link another view, and listens for its view events and model events
     });
 
 `childView`: Backbone.ItemView
+
 `collection`: Backbone.Collection
+
 `onAdd`, `onRemove`, `onReset`: callbacks
+
 `sortable` and `onSort`: drag and drop sorting (jQuery UI)
 
 #### collectionView.add(model)
@@ -568,3 +571,61 @@ Create a Module instance.
 
     @param {Object} options
     @returns {ItemView}
+
+### Backbone.ListModule
+
+#### Backbone.ListModule(options)
+
+Backbone ListModule builder.
+
+    var Mod = Backbone.ListModule({
+
+      // Model settings
+      dataDefaults: {
+        prop: 'value'
+      },
+
+      dataHandlers: {
+        initialize: function (options) {
+          this.init = options.init;
+        }
+      },
+
+      // View settings
+      tagName: 'ul',
+      template: '<%= id %>',
+      sortable: true,
+
+      // ItemView settings
+      itemSettings: {
+        tagName: 'li',
+        template: '<%= id %>',
+
+        domEvents: {
+          click: function (e) { }
+        },
+
+        modelEvents: {
+          change: function (model, value) { }
+        },
+
+        viewEvents: {
+          viewChange: function (value) { }
+        }
+      }
+    });
+
+    @param {Object}    options
+    @param {Object}    options.itemSettings - ItemView settings
+
+#### ListModule.create(collection)
+
+Create a ListModule instance.
+
+    @param {[Object]} collection
+    @returns {CollectionView}
+
+    var list = List.create([ { id: 1 }, { id: 2 } ]);
+
+    list.children   // => [ItemView]
+    list.collection // => Backbone.Collection

@@ -436,11 +436,8 @@ describe('backbone-ext', function () {
           }),
           cv = new CV({
             collection: [ { id: 1 }, { id: 2 } ]
-          }),
-          cve = new CV();
-
-      cv.render();
-      cve.render();
+          }).render(),
+          cve = new CV().render();
 
       expect(cv.$('a')).to.be.length(2);
       expect(cve.$('a')).to.be.length(0);
@@ -448,6 +445,7 @@ describe('backbone-ext', function () {
       expect(cve.collection).to.be.length(0);
       expect(cv.children).to.be.length(2);
       expect(cve.children).to.be.length(0);
+      expect(cv.children[0].parent).to.be.equal(cv);
     });
 
     it('creates a collection view', function () {
@@ -464,9 +462,7 @@ describe('backbone-ext', function () {
           }),
           cv = new CV({
             collection: [ { id: 1 }, { id: 2 } ]
-          });
-
-      cv.render();
+          }).render();
 
       cv.add({ id: 3 });
       expect(cv.children[2].model.get('id')).to.be.equal(3);
@@ -488,9 +484,7 @@ describe('backbone-ext', function () {
           }),
           cv = new CV({
             collection: [ { id: 1 }, { id: 2 } ]
-          });
-
-      cv.render();
+          }).render();
 
       cv.add({ id: 3 });
       expect(cv.children[2].model.get('id')).to.be.equal(3);
@@ -512,9 +506,7 @@ describe('backbone-ext', function () {
           }),
           cv = new CV({
             collection: [ { id: 1 }, { id: 2 }, { id: 3 } ]
-          });
-
-      cv.render();
+          }).render();
 
       cv.remove({ id: 3 });
       expect(cv.collection).to.be.length(2);
@@ -540,9 +532,7 @@ describe('backbone-ext', function () {
           }),
           cv = new CV({
             collection: [ { id: 1 }, { id: 2 }, { id: 3 } ]
-          });
-
-      cv.render();
+          }).render();
 
       cv.reset([ { id: 4 }, { id: 5 }, { id: 6 } ]);
       expect(cv.collection).to.be.length(3);
@@ -571,9 +561,7 @@ describe('backbone-ext', function () {
           }),
           cv = new CV({
             collection: [ { id: 1 } ]
-          });
-
-      cv.render();
+          }).render();
 
       cv.add({ id: 2 });
       expect(addSpy).to.be.calledOnce;
@@ -604,11 +592,9 @@ describe('backbone-ext', function () {
           }),
           cv = new CV({
             collection: [ { id: 1 }, { id: 2 }, { id: 3 } ]
-          }),
-          $li;
+          }).render(),
+          $li = cv.$('li').eq(0);
 
-      cv.render();
-      $li = cv.$('li').eq(0);
       cv.$el.append($li);
       cv._triggerSort({}, { item: $li[0] });
 
@@ -724,6 +710,77 @@ describe('backbone-ext', function () {
 
       mod.trigger('viewChange', 'new view');
       expect(mod.get('viewChanged')).to.be.equal('new view');
+    });
+  });
+
+  describe('ListModule', function () {
+
+    it('creates a ListModule', function () {
+      var clickSpy = sinon.spy(),
+          changeSpy = sinon.spy(),
+          viewSpy = sinon.spy(),
+          parentViewSpy = sinon.spy(),
+          List = Backbone.ListModule({
+            tagName: 'ul',
+            template: '<%= id %>',
+            sortable: true,
+
+            dataDefaults: {
+              id: 0
+            },
+
+            dataHandlers: {
+              initialize: function (options) {
+                this.init = options.init;
+              }
+            },
+
+            onSort: function (view, newIndex) {
+              _.log(newIndex);
+            },
+
+            viewEvents: {
+              parentChange: parentViewSpy
+            },
+
+            itemSettings: {
+              tagName: 'li',
+              template: '<%= id %>',
+
+              domEvents: {
+                click: clickSpy
+              },
+
+              modelEvents: {
+                change: changeSpy
+              },
+
+              viewEvents: {
+                viewChange: viewSpy
+              }
+            }
+          }),
+          mod = List.create([ { id: 1 }, {} ]).render();
+
+      expect(mod.children).to.be.length(2);
+      expect(mod.collection).to.be.length(2);
+      expect(mod.children[0].parent).to.be.equal(mod);
+
+      expect(mod.el.tagName.toLowerCase()).to.be.equal('ul');
+      expect(mod.$('li')).to.be.length(2);
+      expect(mod.$('li').eq(1).text()).to.be.equal('0');
+
+      mod.$('li').eq(1).click();
+      expect(clickSpy).to.be.calledOnce;
+
+      mod.children[0].set('id', 2);
+      expect(changeSpy).to.be.calledOnce;
+
+      mod.children[0].trigger('viewChange');
+      expect(viewSpy).to.be.calledOnce;
+
+      mod.trigger('parentChange');
+      expect(parentViewSpy).to.be.calledOnce;
     });
   });
 });
