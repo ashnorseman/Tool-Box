@@ -480,6 +480,7 @@ Link another view, and listens for its view events and model events
 #### collectionView.add(model)
 #### collectionView.remove(model)
 #### collectionView.reset([model1, model2])
+#### collectionView.create(model, options)
 
 ### Backbone.Module
 

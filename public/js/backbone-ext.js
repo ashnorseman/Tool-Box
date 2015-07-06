@@ -5,7 +5,7 @@
 
 (function (Model, Collection, View) {
   var modelMethods = ['get', 'set'],
-      collectionMethods = ['add', 'remove', 'reset', 'set', 'get'],
+      collectionMethods = ['add', 'remove', 'reset', 'create', 'set', 'get'],
 
   // Supports `onInitialize`, `onRender`, `onRemove`
       defaultCallbacks = ['initialize', 'render', 'remove', 'sort'],
@@ -495,11 +495,15 @@
     delete options.viewApi;
 
     this.Model = Model.extend(_.safeExtendOwn({
+      url: options.url,
+      urlRoot: options.urlRoot,
       defaults: options.dataDefaults
     }, options.dataHandlers));
 
     delete options.dataDefaults;
     delete options.dataHandlers;
+    delete options.url;
+    delete options.urlRoot;
 
     this.View = ItemView.extend(options);
   };
@@ -546,8 +550,10 @@
 
     // Collection
     this.Collection = Collection.extend({
+      url: options.url,
       model: this.Model
     });
+    delete options.url;
 
     // Child views
     this.ChildView = Module(options.itemSettings).View;
