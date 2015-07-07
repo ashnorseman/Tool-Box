@@ -422,7 +422,8 @@
      */
     removeChild: function (model) {
       this.children = _.without(this.children, model.view);
-      model.view.remove();
+      model.view.undelegateEvents();
+      model.view.$el.remove();
       if (_.isFunction(this.onRemove)) this.onRemove.apply(this, arguments);
       return this;
     },
@@ -497,6 +498,7 @@
     this.Model = Model.extend(_.safeExtendOwn({
       url: options.url,
       urlRoot: options.urlRoot,
+      idAttribute: options.idAttribute,
       defaults: options.dataDefaults
     }, options.dataHandlers));
 
@@ -504,6 +506,7 @@
     delete options.dataHandlers;
     delete options.url;
     delete options.urlRoot;
+    delete options.idAttribute;
 
     this.View = ItemView.extend(options);
   };
@@ -542,9 +545,11 @@
 
     // Model
     this.Model = Model.extend(_.safeExtendOwn({
+      idAttribute: options.idAttribute,
       defaults: options.dataDefaults
     }, options.dataHandlers));
 
+    delete options.idAttribute;
     delete options.dataDefaults;
     delete options.dataHandlers;
 
