@@ -87,6 +87,12 @@ Enter key shortcut
 
 Hitting enter key on the element will trigger `click` event on relative `data-enter` element.
 
+#### `[data-accesskey="65"]`
+
+Accesskey
+
+Trigger a click event from accesskey (when not focused on any inputs)
+
 #### `[data-select-all="select-name"], [data-select="#select-all"]`
 
 Checkbox select-all kit

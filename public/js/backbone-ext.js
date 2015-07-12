@@ -296,6 +296,7 @@
       // collection data
       this.collection = new this.constructor.prototype.collection(options.collection);
       this.dataShortcut(collectionMethods, 'collection');
+      this.listenToDataEvents(_.result(this, 'modelEvents'), this.collection);
       this.listenToDataEvents({
         add: 'addChild',
         remove: 'removeChild',

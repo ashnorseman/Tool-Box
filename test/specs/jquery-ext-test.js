@@ -128,6 +128,29 @@ describe('jquery-ext', function () {
     $enter2.remove();
   });
 
+  it('[data-accesskey]', function () {
+    var $button = $('<button data-accesskey="65"></button>').appendTo($body),
+        $input = $('<input>').appendTo($body),
+        spy = sinon.spy(),
+        e = $.Event('keyup');
+
+    e.which = 65;
+    e.target = document.body;
+    $button.on('click', spy);
+
+    expect(spy).to.be.not.called;
+    $(document.body).trigger(e);
+    expect(spy).to.be.calledOnce;
+
+    e.target = $input[0];
+    $input.trigger(e);
+    expect(spy).to.be.calledOnce;
+
+    e.target = document.body;
+    $(document.body).trigger(e);
+    expect(spy).to.be.calledTwice;
+  });
+
   it('[data-toggle]', function () {
     var $btn = $('<button type="button" data-toggle="#toggle" data-toggle-class="toggle-class"></button>').appendTo($body),
         $p = $('<p id="toggle"></p>').appendTo($body);

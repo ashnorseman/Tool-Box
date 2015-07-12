@@ -150,7 +150,20 @@ $(function (w, d) {
   $d.on('keyup', '[data-enter]', function (e) {
 
     if (e.which === 13) {
-      $(e.target.getAttribute('data-enter')).trigger('click');
+      $(e.target.getAttribute('data-enter')).trigger($.events.click);
+    }
+  });
+
+
+  /**
+   * Accesskey
+   * Trigger a click event from accesskey (when not focused on any inputs)
+   */
+  $d.on('keyup', function (e) {
+    var tag = e.target.tagName.toUpperCase();
+
+    if (tag !== 'INPUT' && tag !== 'TEXTAREA') {
+      $('[data-accesskey=' + e.which + ']').trigger($.events.click);
     }
   });
 
