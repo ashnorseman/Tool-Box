@@ -16,6 +16,7 @@ module.exports = function (grunt) {
           'public/dist/tool-box.min.js': [
             'public/js/detect-device.js',
             'public/js/jquery-ext.js',
+            'public/js/jquery-form.js',
             'public/js/underscore-ext.js',
             'public/js/backbone-ext.js'
           ]
@@ -81,7 +82,7 @@ module.exports = function (grunt) {
 
   // Default task(s).
   grunt.registerTask('default', [
-    'less',
+    //'less',
     'uglify',
     'karma',
     'watch'

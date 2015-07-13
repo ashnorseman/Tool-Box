@@ -23,6 +23,7 @@ module.exports = function(config) {
       'public/js/jquery-ext.js',
       'public/js/underscore-ext.js',
       'public/js/backbone-ext.js',
+      'public/js/jquery-form.js',
       'test/**/*.js'
     ],
 

@@ -149,6 +149,9 @@ describe('jquery-ext', function () {
     e.target = document.body;
     $(document.body).trigger(e);
     expect(spy).to.be.calledTwice;
+
+    $button.remove();
+    $input.remove();
   });
 
   it('[data-toggle]', function () {

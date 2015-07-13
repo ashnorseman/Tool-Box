@@ -7,7 +7,7 @@
   var modelMethods = ['get', 'set'],
       collectionMethods = ['add', 'remove', 'reset', 'create', 'set', 'get'],
 
-  // Supports `onInitialize`, `onRender`, `onRemove`
+      // Supports `onInitialize`, `onRender`, `onRemove`
       defaultCallbacks = ['initialize', 'render', 'remove', 'sort'],
 
       oldExtend = Model.extend,
@@ -82,7 +82,7 @@
     View.apply(this, arguments);
 
     // Events listening
-    this.listenToDataEvents(_.result(this, 'modelEvents'));
+    this.listenToModelEvents(_.result(this, 'modelEvents'));
     this.listenToViewEvents(defaultCallbacks);              // Default
     this.listenToViewEvents(_.result(this, 'viewEvents'));  // Custom
 
@@ -151,9 +151,9 @@
       if (options.holder) anotherView.$el.appendTo(this.$(options.holder));
 
       // Two-way event listening
-      this.listenToDataEvents(options.modelEventsListening, anotherView.model);
+      this.listenToModelEvents(options.modelEventsListening, anotherView.model);
       this.listenToViewEvents(options.viewEventsListening, anotherView);
-      anotherView.listenToDataEvents(options.modelEventsListened, this.model);
+      anotherView.listenToModelEvents(options.modelEventsListened, this.model);
       anotherView.listenToViewEvents(options.viewEventsListened, this);
 
       return this;
@@ -162,22 +162,22 @@
 
     /**
      * Listen to data events map
-     * Like: { dataEvents: { 'change:value': 'render' } }
-     * @param {{event: string|Function}}            dataEvents
+     * Like: { modelEvents: { 'change:value': 'render' } }
+     * @param {{event: string|Function}}            modelEvents
      * @param {Backbone.Model|Backbone.Collection}  [data]
      * @param {string}                              [type]
      * @returns {Backbone.ItemView}
      */
-    listenToDataEvents: function (dataEvents, data, type) {
+    listenToModelEvents: function (modelEvents, data, type) {
       var key, method;
 
       type = type || 'model';
 
-      if (!(data || (data = this[type])) || !dataEvents) return this;
+      if (!(data || (data = this[type])) || !modelEvents) return this;
 
       // e.g. { click: 'getData', clear: function () {} }
-      for (key in dataEvents) if (dataEvents.hasOwnProperty(key)) {
-        if (!_.isFunction(method = dataEvents[key]) && !_.isFunction(method = this[method])) return;
+      for (key in modelEvents) if (modelEvents.hasOwnProperty(key)) {
+        if (!_.isFunction(method = modelEvents[key]) && !_.isFunction(method = this[method])) return;
         this.listenTo(data, key, method);
       }
 
@@ -296,8 +296,8 @@
       // collection data
       this.collection = new this.constructor.prototype.collection(options.collection);
       this.dataShortcut(collectionMethods, 'collection');
-      this.listenToDataEvents(_.result(this, 'modelEvents'), this.collection);
-      this.listenToDataEvents({
+      this.listenToModelEvents(_.result(this, 'modelEvents'), this.collection);
+      this.listenToModelEvents({
         add: 'addChild',
         remove: 'removeChild',
         reset: 'resetChild'

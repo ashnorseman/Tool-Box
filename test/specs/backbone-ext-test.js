@@ -718,6 +718,7 @@ describe('backbone-ext', function () {
     it('creates a ListModule', function () {
       var clickSpy = sinon.spy(),
           changeSpy = sinon.spy(),
+          addSpy = sinon.spy(),
           viewSpy = sinon.spy(),
           parentViewSpy = sinon.spy(),
           List = Backbone.ListModule({
@@ -737,6 +738,10 @@ describe('backbone-ext', function () {
 
             onSort: function (view, newIndex) {
               _.log(newIndex);
+            },
+
+            modelEvents: {
+              add: addSpy
             },
 
             viewEvents: {
@@ -778,6 +783,11 @@ describe('backbone-ext', function () {
 
       mod.children[0].trigger('viewChange');
       expect(viewSpy).to.be.calledOnce;
+
+      mod.add({});
+      expect(mod.collection).to.be.length(3);
+      expect(mod.children).to.be.length(3);
+      expect(addSpy).to.be.calledOnce;
 
       mod.trigger('parentChange');
       expect(parentViewSpy).to.be.calledOnce;
