@@ -147,7 +147,7 @@ $(function (w, d) {
    * Enter key shortcut
    * Hitting enter key on the element will trigger `click` event on relative `data-enter` element.
    */
-  $d.on('keyup', '[data-enter]', function (e) {
+  $d.on('keypress', '[data-enter]', function (e) {
 
     if (e.which === 13) {
       $(e.target.getAttribute('data-enter')).trigger($.events.click);

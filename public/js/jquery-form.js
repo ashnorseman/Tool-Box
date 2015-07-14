@@ -121,6 +121,9 @@ $(function (w, d) {
   $.fn.extend({
 
 
+    // Validations
+    // ---------------------------
+
     /**
      * Add validation options to a form control
      * @param {Object|Array}  options - or an array of options
@@ -153,14 +156,27 @@ $(function (w, d) {
      * @returns {boolean}
      */
     isValid: function () {
+      var error = {},
+          valid;
 
       if (this[0].tagName.toUpperCase() === 'FORM') {
 
-        return _.reduce(this.find(':enabled:visible:not(:button)'), function (valid, input) {
-          return !$(input).validate() && valid;
+        valid = _.reduce(this.find(':enabled:not(:button)'), function (valid, input) {
+          var inputResult = $(input)._validate();
+
+          if (inputResult) {
+            error[input.name] = inputResult;
+          }
+
+          return !inputResult && valid;
         }, true);
+
+        this[0].validationError = error;
+        valid ? this.triggerHandler('valid') : this.triggerHandler('invalid', error);
+
+        return valid;
       } else {
-        return !this.validate();
+        return !this._validate();
       }
     },
 
@@ -171,13 +187,17 @@ $(function (w, d) {
      * - triggers `valid` or `invalid` event
      * @returns {Null|Object} - Null: valid / Object: invalid with error message
      */
-    validate: function () {
+    _validate: function () {
       var input = this[0],
+          value = this.val(),
           error = {},
           valid;
 
-      if (!input.validation) {
-        this._collectValidation();
+      this._collectValidation();
+
+      if (!input.validation.required && (_.isEmpty(value) || !value.length)) {
+        input.validationError = error;
+        return null;
       }
 
       _.each(input.validation, function (validation, type) {
@@ -189,7 +209,7 @@ $(function (w, d) {
 
       input.validationError = error;
       valid = _.isEmpty(error);
-      valid ? this.trigger('valid') : this.trigger('invalid', error);
+      valid ? this.triggerHandler('valid') : this.triggerHandler('invalid', error);
 
       return valid ? null : error;
     },
@@ -215,6 +235,91 @@ $(function (w, d) {
       });
 
       return this.addValidation(validations);
+    },
+    
+    
+    // Submit
+    // ---------------------------
+
+
+    /**
+     * Collect form data
+     * - checkbox: Array of checked values
+     * - radio: checked value
+     * - select-one: selected value
+     * - select-multiple: Array of selected values
+     * - other: value
+     * @param {string|HTMLElement|jQuery}  form
+     * @returns {Object}
+     */
+    getFormData: function (form) {
+      var $form = form ? $(form) : this.closest('form'),
+          formData = {};
+
+      $form.find(':input:not(:button)').each(function (i, input) {
+        var value;
+
+        if (!_.notEmpty(input.name) || !_.notEmpty(value = $(input).val())) return;
+
+        switch(input.type) {
+
+          // All checked `checkbox`
+        case 'checkbox':
+          formData[input.name] || (formData[input.name] = []);
+
+          if (input.checked) {
+            formData[input.name].push(value);
+          }
+          break;
+
+          // Checked `radio`
+        case 'radio':
+          if (input.checked) {
+            formData[input.name] = value;
+          }
+          break;
+
+          // Other
+        default:
+          formData[input.name] = value;
+        }
+      });
+
+      return formData;
+    },
+
+
+    /**
+     * Use ajax to submit the form data
+     * @param {string} [url]
+     * @param {Object} options
+     * @param {string} options.url - or form `action`
+     * @param {string} options.method - default: 'POST' or form `method`
+     * @param {Object} options.data - data submit with the form
+     * @returns {Deferred}
+     */
+    submit: function (url, options) {
+      var $form = this.closest('form');
+
+      // Only submit valid forms
+      if (!$form.isValid()) return this;
+
+      if (_.isString(url)) {
+
+        // url, options
+        options || (options = {});
+      } else {
+
+        // options
+        options = _.isObject(url) ? url : {};
+        url = options.url || $form.attr('action');
+      }
+
+      options.method || (options.method = $form.attr('method') || 'post');
+      options.data || (options.data = {});
+      _.extend(options.data, $form.getFormData());
+
+      return $.ajax(url, options);
     }
   });
 
@@ -226,7 +331,7 @@ $(function (w, d) {
   /**
    * Toggle valid / invalid CSS classes
    */
-  $d.on('valid invalid', ':enabled:visible', function (e) {
+  $d.on('valid invalid', ':enabled', function (e) {
 
     $(e.target)
         .removeClass('form-valid form-invalid')
@@ -234,6 +339,34 @@ $(function (w, d) {
         .parent()
         .removeClass('has-valid has-invalid')
         .addClass('has-' + e.type);
+  });
+
+
+  /**
+   * Hit enter to trigger `click` event on submit button
+   * - Button:
+   *   = <form data-submit="#submit-button"> (outside the form)
+   *   = <button data-action="submit"> (within the form)
+   */
+  $d.on('keypress', 'input, select', function (e) {
+    var $form, $button;
+
+    if (e.which === 13) {
+      $form = $(e.target).closest('form');
+
+      if ($form.length) {
+
+        if ($form.data('submit')) {
+          $button = $($form.data('submit'));
+        } else {
+          $button =$form.find('[data-action=submit]');
+        }
+
+        $button.length && $button.trigger($.events.click);
+      }
+
+      e.preventDefault();
+    }
   });
 
 }(window, document));

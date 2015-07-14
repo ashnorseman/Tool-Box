@@ -1,0 +1,57 @@
+<form action="/form">
+  <div>
+    <input type="text" name="text" value="Text" minlength="10" autofocus>
+  </div>
+
+  <div>
+    <input type="number" name="number" value="Number" min="10" max="100">
+  </div>
+
+  <div>
+    <input type="email" name="email" value="Email" data-format="email">
+  </div>
+
+  <div>
+    <select name="select-one" min="5">
+      <option value="4" selected>4</option>
+      <option value="5">5</option>
+    </select>
+  </div>
+
+  <div>
+    <select name="select-multiple" min="2">
+      <option value="1" selected>1</option>
+      <option value="2">2</option>
+    </select>
+  </div>
+
+  <div>
+    <input type="checkbox" name="checkbox" value="1" required>
+  </div>
+
+  <button data-action="submit" id="form-submit">Submit</button>
+</form>
+
+{{#section 'pageScript'}}
+  <script>
+
+    $(function () {
+
+      $('form').on('invalid', function (e, error) {
+        _.log(error);
+      });
+
+      $('#form-submit').on($.events.click, function () {
+
+        $('form').submit({
+          beforeSend: function (xhr, options) {
+//            _.log(options.data);
+          }
+        });
+
+        return false;
+      });
+    });
+
+  </script>
+{{/section}}

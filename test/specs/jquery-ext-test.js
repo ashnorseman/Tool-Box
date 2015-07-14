@@ -105,13 +105,13 @@ describe('jquery-ext', function () {
     $('#isChildOf-p, #isChildOf-no-p').remove();
   });
 
-  it('[data-key]', function () {
+  it('[data-enter]', function () {
     var $input = $('<input data-enter="#enter">').appendTo($body),
         $enter = $('<button type="button" id="enter"></button>').appendTo($body),
         $enter2 = $('<button type="button" id="enter-2"></button>').appendTo($body),
         spy = sinon.spy(),
         spy2 = sinon.spy(),
-        e = $.Event('keyup');
+        e = $.Event('keypress');
 
     e.which = 13;
     $enter.on('click', spy);
