@@ -94,7 +94,58 @@ describe.only('jQuery Form', function () {
 
     $input._validate();
     expect(_.keys($input[0].validationError)).to.be.length(0);
-    expect($input.isValid()).to.be.equal(true);
+  });
+
+  it('_validate() - a single checkbox or radio', function () {
+    var $check1 = $('<input type="checkbox" required>'),
+        $check2 = $('<input type="checkbox" required checked>'),
+        $radio1 = $('<input type="radio" required>'),
+        $radio2 = $('<input type="radio" required checked>');
+
+    $check1._validate();
+    expect($check1[0].validationError.required).to.be.an('object');
+
+    $check2._validate();
+    expect($check2[0].validationError.required).to.be.not.ok;
+
+    $radio1._validate();
+    expect($radio1[0].validationError.required).to.be.an('object');
+
+    $radio2._validate();
+    expect($radio2[0].validationError.required).to.be.not.ok;
+  });
+
+  it('_validate() - a list of checkbox or radio', function () {
+    var $check1 = $('<input type="checkbox" name="checkbox" data-minimum="1" data-maximum="1">'),
+        $check2 = $('<input type="checkbox" name="checkbox">'),
+        $radio1 = $('<input type="radio" name="radio" data-minimum="1">'),
+        $radio2 = $('<input type="radio" name="radio">'),
+        $form = $('<form></form>');
+
+    $form
+        .append($check1).append($check2)
+        .append($radio1).append($radio2);
+
+    $check1._validate();
+    expect($check1[0].validationError.minimum).to.be.an('object');
+    expect($check1[0].validationError.maximum).to.be.not.ok;
+
+    $check2.prop('checked', true);
+    $check1._validate();
+    expect($check1[0].validationError.minimum).to.be.not.ok;
+    expect($check1[0].validationError.maximum).to.be.not.ok;
+
+    $check1.prop('checked', true);
+    $check1._validate();
+    expect($check1[0].validationError.minimum).to.be.not.ok;
+    expect($check1[0].validationError.maximum).to.be.an('object');
+
+    $radio1._validate();
+    expect($radio1[0].validationError.minimum).to.be.an('object');
+
+    $radio2.prop('checked', true);
+    $radio1._validate();
+    expect($radio1[0].validationError.minimum).to.be.not.ok;
   });
 
   it('_validate() - custom', function () {
@@ -186,6 +237,80 @@ describe.only('jQuery Form', function () {
     expect($body.hasClass('has-invalid')).to.be.ok;
 
     $input.remove();
+  });
+
+  it('.clear()', function () {
+    var $form = $('<form></form>'),
+        $input1 = $('<input required>'),
+        $check = $('<input type="checkbox" required checked>');
+
+    $form
+        .append($input1).append($check)
+        .appendTo($body);
+
+    $input1.isValid();
+    expect($input1[0].validationError.required).to.be.an('object');
+    expect($input1.hasClass('form-invalid')).to.be.ok;
+    expect($form.hasClass('has-invalid')).to.be.ok;
+
+    $input1.clear();
+    expect($input1.val()).to.be.not.ok;
+    expect($input1[0].validationError).to.be.not.ok;
+    expect($input1.hasClass('form-invalid')).to.be.not.ok;
+    expect($form.hasClass('has-invalid')).to.be.not.ok;
+
+    $check.isValid();
+    expect($check.hasClass('form-valid')).to.be.ok;
+    expect($form.hasClass('has-valid')).to.be.ok;
+
+    $check.clear();
+    expect($check.prop('checked')).to.be.equal(false);
+    expect($check[0].validationError).to.be.not.ok;
+    expect($check.hasClass('form-valid')).to.be.not.ok;
+    expect($form.hasClass('has-valid')).to.be.not.ok;
+
+    $form.remove();
+  });
+
+  it('.clear() - form', function () {
+    var $form = $('<form></form>'),
+        $input = $('<input required>'),
+        $check = $('<input type="checkbox" required>');
+
+    $form
+        .append($input).append($check)
+        .appendTo($body);
+
+    $form.isValid();
+    expect($form.hasClass('has-invalid')).to.be.ok;
+
+    $form.clear();
+    expect($form.hasClass('has-invalid')).to.be.not.ok;
+    expect($input.val()).to.be.not.ok;
+    expect($input.hasClass('form-invalid')).to.be.not.ok;
+    expect($check.prop('checked')).to.be.not.ok;
+    expect($check.hasClass('form-invalid')).to.be.not.ok;
+
+    $form.remove();
+  });
+
+
+  it('.clear()', function () {
+    var $input = $('<input value="1">'),
+        $form = $('<form></form>'),
+        spy = sinon.spy(),
+        formSpy = sinon.spy();
+
+    $input.on('clear', spy);
+    $form.on('clear', formSpy);
+    expect(spy).to.be.not.called;
+    expect(formSpy).to.be.not.called;
+
+    $input.clear();
+    expect(spy).to.be.calledOnce;
+
+    $form.clear();
+    expect(formSpy).to.be.calledOnce;
   });
 
   it('.getFormData(form)', function () {
@@ -306,5 +431,20 @@ describe.only('jQuery Form', function () {
     expect(spy).to.be.calledOnce;
 
     $form.remove();
+  });
+
+  it('$.form.addCustomValidation(options)', function () {
+    var $input = $('<input name="text" value="2" data-equal="1">');
+
+    expect($input.isValid()).to.be.ok;
+
+    $.form.addCustomValidation({
+      type: 'equal',
+      predict: function (value, validation) {
+        return +value === validation.data;
+      }
+    });
+
+    expect($input.isValid()).to.be.not.ok;
   });
 });

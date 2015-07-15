@@ -26,7 +26,17 @@
   </div>
 
   <div>
-    <input type="checkbox" name="checkbox" value="1" required>
+    <input type="checkbox" name="checkbox" value="1" data-minimum="1">
+    <input type="checkbox" name="checkbox" value="2">
+  </div>
+
+  <div>
+    <input type="radio" name="radio" value="1" data-minimum="1">
+    <input type="radio" name="radio" value="2">
+  </div>
+
+  <div>
+    <textarea name="textarea" required></textarea>
   </div>
 
   <button data-action="submit" id="form-submit">Submit</button>

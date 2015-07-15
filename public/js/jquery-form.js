@@ -6,9 +6,20 @@
 $(function (w, d) {
   var $d = $(d),
       HTML5_VALIDS = ['required', 'min', 'max', 'minlength', 'maxlength', 'pattern'],
-      CUSTOM_VALIDS = ['format'],
+      CUSTOM_VALIDS = [
+        'format',   // email, number
+        'minimum',  // a list of checkbox or radio in a form, check at least n
+        'maximum'   // check at most n
+      ],
       VALID_PREDICTS = {
-        required: function (value) {
+        required: function (value, validation) {
+          var type = validation.input.type;
+
+          // For checkbox or radio, check `checked` status
+          if (type === 'checkbox' || type === 'radio') {
+            return validation.input.checked;
+          }
+
           return value !== '';
         },
         min: function (value, validation) {
@@ -63,6 +74,12 @@ $(function (w, d) {
           }
 
           return new RegExp(pattern).test(value);
+        },
+        minimum: function (value, validation) {
+          return checkedSibling(validation.input).length >= +validation.data;
+        },
+        maximum: function (value, validation) {
+          return checkedSibling(validation.input).length <= +validation.data;
         }
       };
 
@@ -78,6 +95,10 @@ $(function (w, d) {
       data: data,
       predict: VALID_PREDICTS[criteria]
     });
+  }
+
+  function checkedSibling(input) {
+    return $(input).closest('form').find('[name=' + input.name + ']:checked');
   }
 
 
@@ -113,6 +134,26 @@ $(function (w, d) {
 
     _.extend(this, options);
   }
+
+
+  // Settings
+  // ---------------------------
+
+  $.form = {
+
+    addCustomValidation: function (options) {
+      var type = options.type,
+          predict = options.predict;
+
+      if (!_.isString(type) || !_.isFunction(predict)) return;
+
+      if (!_.contains(CUSTOM_VALIDS, type)) {
+        CUSTOM_VALIDS.push(type);
+      }
+
+      VALID_PREDICTS[type] = predict;
+    }
+  };
 
 
   // Form APIs
@@ -153,6 +194,7 @@ $(function (w, d) {
     /**
      * If the input or form is valid
      * - For a form, validate each input. If any input is invalid, the form is invalid
+     * - triggers `valid` or `invalid` event
      * @returns {boolean}
      */
     isValid: function () {
@@ -172,7 +214,7 @@ $(function (w, d) {
         }, true);
 
         this[0].validationError = error;
-        valid ? this.triggerHandler('valid') : this.triggerHandler('invalid', error);
+        valid ? this.trigger('valid') : this.trigger('invalid', error);
 
         return valid;
       } else {
@@ -195,6 +237,10 @@ $(function (w, d) {
 
       this._collectValidation();
 
+      // Do not validate inputs without validations
+      if (_.isEmpty(input.validation)) return null;
+
+      // Do not validate empty non-required validations
       if (!input.validation.required && (_.isEmpty(value) || !value.length)) {
         input.validationError = error;
         return null;
@@ -209,7 +255,7 @@ $(function (w, d) {
 
       input.validationError = error;
       valid = _.isEmpty(error);
-      valid ? this.triggerHandler('valid') : this.triggerHandler('invalid', error);
+      valid ? this.trigger('valid') : this.trigger('invalid', error);
 
       return valid ? null : error;
     },
@@ -235,6 +281,54 @@ $(function (w, d) {
       });
 
       return this.addValidation(validations);
+    },
+
+
+    // Value
+    // ---------------------------
+
+
+    /**
+     * Clear validation status and value
+     * - triggers `clear` event
+     * @returns {jQuery}
+     */
+    clear: function () {
+      var type;
+
+      if (this[0].tagName.toUpperCase() === 'FORM') {
+
+        // Clear each input
+        this.find(':input:not(:button)').each(function () {
+          $(this).clear();
+        });
+
+        // Trigger event
+        this.trigger('clear');
+      } else {
+        type = this[0].type;
+
+        // Set value to null or unchecked
+        if (type === 'checkbox' || type === 'radio') {
+          this[0].checked = false;
+        } else {
+          this.val(null);
+        }
+
+        // Error data
+        this[0].validationError = null;
+
+        // Remove relative classes
+        this
+            .removeClass('form-valid form-invalid')
+            .parent()
+            .removeClass('has-valid has-invalid');
+
+        // Trigger event
+        this.trigger('clear');
+      }
+
+      return this;
     },
     
     
@@ -263,7 +357,7 @@ $(function (w, d) {
 
         switch(input.type) {
 
-          // All checked `checkbox`
+        // All checked `checkbox`
         case 'checkbox':
           formData[input.name] || (formData[input.name] = []);
 
@@ -272,14 +366,14 @@ $(function (w, d) {
           }
           break;
 
-          // Checked `radio`
+        // Checked `radio`
         case 'radio':
           if (input.checked) {
             formData[input.name] = value;
           }
           break;
 
-          // Other
+        // Other
         default:
           formData[input.name] = value;
         }
@@ -339,6 +433,8 @@ $(function (w, d) {
         .parent()
         .removeClass('has-valid has-invalid')
         .addClass('has-' + e.type);
+
+    e.stopPropagation();
   });
 
 
