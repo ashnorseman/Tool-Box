@@ -3,8 +3,12 @@
 // ---------------------------
 
 
-describe.only('jQuery Form', function () {
+describe('jQuery Form', function () {
   var $body = $(document.body);
+
+  afterEach(function () {
+    $('.form-error-text').remove();
+  });
 
   it('.addValidation(options)', function () {
     var $input = $('<input value="10">');
@@ -169,6 +173,8 @@ describe.only('jQuery Form', function () {
         validSpy = sinon.spy(),
         invalidSpy = sinon.spy();
 
+    $input.appendTo($body);
+
     $input.on('valid', validSpy);
     $input.on('invalid', invalidSpy);
 
@@ -176,11 +182,15 @@ describe.only('jQuery Form', function () {
     expect(validSpy).to.be.not.called;
     expect(invalidSpy).to.be.calledOnce;
     expect(invalidSpy.firstCall.args[1]).to.be.equal($input[0].validationError);
+    expect($input.next().hasClass('form-error-text')).to.be.ok;
 
     $input.val('1');
     $input._validate();
     expect(validSpy).to.be.calledOnce;
     expect(invalidSpy).to.be.calledOnce;
+    expect($input.next().hasClass('form-error-text')).to.be.not.ok;
+
+    $input.remove();
   });
 
   it('_validate() - select-multiple', function () {
@@ -237,6 +247,124 @@ describe.only('jQuery Form', function () {
     expect($body.hasClass('has-invalid')).to.be.ok;
 
     $input.remove();
+  });
+
+  it('.getVal()', function () {
+    var $form = $('<form></form>'),
+        $input = $('<input type="text" name="text" value="text">');
+
+    $form.append($input);
+
+    expect($form.getVal('text')).to.be.equal('text');
+  });
+
+  it('.getVal() - checkbox single', function () {
+    var $form = $('<form></form>'),
+        $check = $('<input type="checkbox" name="checkbox" value="1" checked>');
+
+    $form.append($check);
+    expect($form.getVal('checkbox')).to.be.equal(true);
+
+    $check.prop('checked', false);
+    expect($form.getVal('checkbox')).to.be.equal(false);
+  });
+
+  it('.getVal() - checkbox list', function () {
+    var $form = $('<form></form>'),
+        $check1 = $('<input type="checkbox" name="checkbox" value="1" checked>'),
+        $check2 = $('<input type="checkbox" name="checkbox" value="2">'),
+        $check3 = $('<input type="checkbox" name="checkbox" value="3" checked>');
+
+    $form.append($check1).append($check2).append($check3);
+    expect($form.getVal('checkbox')).to.be.deep.equal(['1', '3']);
+
+    $check1.prop('checked', false);
+    expect($form.getVal('checkbox')).to.be.deep.equal(['3']);
+
+    $check3.prop('checked', false);
+    expect($form.getVal('checkbox')).to.be.equal(null);
+  });
+
+  it('.getVal() - radio', function () {
+    var $form = $('<form></form>'),
+        $radio1 = $('<input type="radio" name="radio" value="1" checked>'),
+        $radio2 = $('<input type="radio" name="radio" value="2">'),
+        $radio3 = $('<input type="radio" name="radio" value="3">');
+
+    $form.append($radio1).append($radio2).append($radio3);
+    expect($form.getVal('radio')).to.be.equal('1');
+
+    $radio3.prop('checked', true);
+    expect($form.getVal('radio')).to.be.equal('3');
+
+    $radio3.prop('checked', false);
+    expect($form.getVal('radio')).to.be.equal(null);
+  });
+
+  it('.setVal()', function () {
+    var $form = $('<form></form>'),
+        $input = $('<input type="text" name="text">');
+
+    $form.append($input);
+    $form.setVal('text', 'text');
+
+    expect($form.getVal('text')).to.be.equal('text');
+  });
+
+  it('.setVal() - checkbox single', function () {
+    var $form = $('<form></form>'),
+        $check = $('<input type="checkbox" name="checkbox" value="1">');
+
+    $form.append($check);
+    expect($form.getVal('checkbox')).to.be.equal(false);
+
+    $form.setVal('checkbox', true);
+    expect($form.getVal('checkbox')).to.be.equal(true);
+
+    $form.setVal('checkbox', false);
+    expect($form.getVal('checkbox')).to.be.equal(false);
+  });
+
+  it('.setVal() - checkbox list', function () {
+    var $form = $('<form></form>'),
+        $check1 = $('<input type="checkbox" name="checkbox" value="1" checked>'),
+        $check2 = $('<input type="checkbox" name="checkbox" value="2">'),
+        $check3 = $('<input type="checkbox" name="checkbox" value="3" checked>');
+
+    $form.append($check1).append($check2).append($check3);
+    expect($check1.prop('checked')).to.be.equal(true);
+    expect($check2.prop('checked')).to.be.equal(false);
+    expect($check3.prop('checked')).to.be.equal(true);
+    expect($form.getVal('checkbox')).to.be.deep.equal(['1', '3']);
+
+    $form.setVal('checkbox', [1, 2]);
+    expect($check1.prop('checked')).to.be.equal(true);
+    expect($check2.prop('checked')).to.be.equal(true);
+    expect($check3.prop('checked')).to.be.equal(false);
+    expect($form.getVal('checkbox')).to.be.deep.equal(['1', '2']);
+
+    $form.setVal('checkbox', null);
+    expect($check1.prop('checked')).to.be.equal(false);
+    expect($check2.prop('checked')).to.be.equal(false);
+    expect($check3.prop('checked')).to.be.equal(false);
+    expect($form.getVal('checkbox')).to.be.equal(null);
+  });
+
+  it('.setVal() - radio', function () {
+    var $form = $('<form></form>'),
+        $radio1 = $('<input type="radio" name="radio" value="1">'),
+        $radio2 = $('<input type="radio" name="radio" value="2">');
+
+    $form.append($radio1).append($radio2);
+    $form.setVal('radio', 1);
+    expect($radio1.prop('checked')).to.be.equal(true);
+    expect($radio2.prop('checked')).to.be.equal(false);
+    expect($form.getVal('radio')).to.be.equal('1');
+
+    $form.setVal('radio', 2);
+    expect($radio1.prop('checked')).to.be.equal(false);
+    expect($radio2.prop('checked')).to.be.equal(true);
+    expect($form.getVal('radio')).to.be.equal('2');
   });
 
   it('.clear()', function () {
@@ -323,6 +451,7 @@ describe.only('jQuery Form', function () {
         .append('<input type="checkbox" name="checkbox" value="1" checked>')
         .append('<input type="checkbox" name="checkbox" value="2" checked>')
         .append('<input type="checkbox" name="checkbox" value="3">')
+        .append('<input type="checkbox" name="checkbox-single" value="3">')
         .append('<input type="radio" name="radio" value="1" checked>')
         .append('<input type="radio" name="radio" value="2">')
         .append('<select name="select"><option selected value="1"></option><option value="2"></option></select>')
@@ -335,6 +464,7 @@ describe.only('jQuery Form', function () {
     expect(formData.checkbox).to.be.length(2);
     expect(formData.checkbox[0]).to.be.equal('1');
     expect(formData.checkbox[1]).to.be.equal('2');
+    expect(formData['checkbox-single']).to.be.equal(false);
     expect(formData.radio).to.be.equal('1');
     expect(formData.select).to.be.equal('1');
     expect(formData['select-multiple']).to.be.length('2');
@@ -342,7 +472,7 @@ describe.only('jQuery Form', function () {
     expect(formData['select-multiple'][1]).to.be.equal('2');
     expect(formData.text).to.be.equal('1');
     expect(formData.textarea).to.be.equal('1');
-    expect(_.keys(formData)).to.be.length(6);
+    expect(_.keys(formData)).to.be.length(7);
 
     expect($body.getFormData($form)).to.be.deep.equal(formData);
   });
@@ -440,6 +570,7 @@ describe.only('jQuery Form', function () {
 
     $.form.addCustomValidation({
       type: 'equal',
+      errorMsg: '不等于 <%= data %>',
       predict: function (value, validation) {
         return +value === validation.data;
       }

@@ -4,97 +4,37 @@
 
 
 $(function (w, d) {
-  var $d = $(d),
-      HTML5_VALIDS = ['required', 'min', 'max', 'minlength', 'maxlength', 'pattern'],
-      CUSTOM_VALIDS = [
-        'format',   // email, number
-        'minimum',  // a list of checkbox or radio in a form, check at least n
-        'maximum'   // check at most n
-      ],
-      VALID_PREDICTS = {
-        required: function (value, validation) {
-          var type = validation.input.type;
-
-          // For checkbox or radio, check `checked` status
-          if (type === 'checkbox' || type === 'radio') {
-            return validation.input.checked;
-          }
-
-          return value !== '';
-        },
-        min: function (value, validation) {
-
-          if (_.isString(value)) {
-
-            // input or select-one
-            return +value >= +validation.data;
-          } else {
-
-            // select-multiple
-            value || (value = []);
-
-            return value.length >= +validation.data;
-          }
-        },
-        max: function (value, validation) {
-
-          if (_.isString(value)) {
-
-            // input or select-one
-            return +value <= +validation.data;
-          } else {
-
-            // select-multiple
-            value || (value = []);
-
-            return value.length <= +validation.data;
-          }
-        },
-        minlength: function (value, validation) {
-          return value.length >= +validation.data;
-        },
-        maxlength: function (value, validation) {
-          return value.length <= +validation.data;
-        },
-        pattern: function (value, validation) {
-          return new RegExp(validation.data).test(value);
-        },
-        format: function (value, validation) {
-          var pattern;
-
-          switch (validation.data) {
-          case 'email':
-            pattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/;
-            break;
-          case 'number':
-            pattern = /^[-+]?[0-9]*\.?[0-9]+$/;
-            break;
-          default:
-            pattern = /./;
-          }
-
-          return new RegExp(pattern).test(value);
-        },
-        minimum: function (value, validation) {
-          return checkedSibling(validation.input).length >= +validation.data;
-        },
-        maximum: function (value, validation) {
-          return checkedSibling(validation.input).length <= +validation.data;
-        }
-      };
+  var $d = $(d);
 
 
   // Methods
   // ---------------------------
 
   function collectValidationData(input, criteria, validations, prefixed) {
-    var data = prefixed ? input.getAttribute('data-' + criteria) : input.getAttribute(criteria);
+    var data,
+        validate;
 
-    if (_.exists(data)) validations.push({
-      type: criteria,
-      data: data,
-      predict: VALID_PREDICTS[criteria]
-    });
+    if (prefixed) {
+
+      // Custom
+      data = input.getAttribute('data-' + criteria);
+
+      validate = _.extend({}, Validation.Types.custom[criteria], {
+        data: data
+      });
+    } else {
+
+      // HTML5
+      data = input.getAttribute(criteria);
+
+      validate = _.extend({}, Validation.Types.html5[criteria], {
+        data: data
+      });
+    }
+
+    if (_.exists(data)) {
+      validations.push(validate);
+    }
   }
 
   function checkedSibling(input) {
@@ -135,6 +75,127 @@ $(function (w, d) {
     _.extend(this, options);
   }
 
+  Validation.Types = {
+
+    html5: {
+      required: {
+        type: 'required',
+        errorMsg: '请输入必填项',
+        predict: function (value, validation) {
+          var type = validation.input.type;
+
+          // For checkbox or radio, check `checked` status
+          if (type === 'checkbox' || type === 'radio') {
+            return validation.input.checked;
+          }
+
+          return value !== '';
+        }
+      },
+      min: {
+        type: 'min',
+        errorMsg: '您输入的数字不得小于 <%= data %>',
+        predict: function (value, validation) {
+
+          if (_.isString(value)) {
+
+            // input or select-one
+            return +value >= +validation.data;
+          } else {
+
+            // select-multiple
+            value || (value = []);
+
+            return value.length >= +validation.data;
+          }
+        }
+      },
+      max: {
+        type: 'max',
+        errorMsg: '您输入的数字不得大于 <%= data %>',
+        predict: function (value, validation) {
+
+          if (_.isString(value)) {
+
+            // input or select-one
+            return +value <= +validation.data;
+          } else {
+
+            // select-multiple
+            value || (value = []);
+
+            return value.length <= +validation.data;
+          }
+        }
+      },
+      minlength: {
+        type: 'minlength',
+        errorMsg: '您输入的文字长度不得小于 <%= data %>',
+        predict: function (value, validation) {
+          return value.length >= +validation.data;
+        }
+      },
+      maxlength: {
+        type: 'maxlength',
+        errorMsg: '您输入的文字长度不得大于 <%= data %>',
+        predict: function (value, validation) {
+          return value.length <= +validation.data;
+        }
+      },
+      pattern: {
+        type: 'pattern',
+        errorMsg: '您输入的内容格式不正确',
+        predict: function (value, validation) {
+          return new RegExp(validation.data).test(value);
+        }
+      }
+    },
+
+    custom: {
+      format: {
+        type: 'format',
+        errorMsg: '请输入正确格式的<%= { email: "电子邮件", number: "数字" }[data] %>',
+        predict: function (value, validation) {
+          var pattern;
+
+          switch (validation.data) {
+          case 'email':
+            pattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/;
+            break;
+          case 'number':
+            pattern = /^[-+]?[0-9]*\.?[0-9]+$/;
+            break;
+          default:
+            pattern = /./;
+          }
+
+          return new RegExp(pattern).test(value);
+        }
+      },
+      minimum: {
+        type: 'minimum',
+        errorMsg: '请至少选择 <%= data %> 项',
+        predict: function (value, validation) {
+          return checkedSibling(validation.input).length >= +validation.data;
+        }
+      },
+      maximum: {
+        type: 'maximum',
+        errorMsg: '请最多选择 <%= data %> 项',
+        predict: function (value, validation) {
+          return checkedSibling(validation.input).length <= +validation.data;
+        }
+      }
+    }
+  };
+
+  Validation.prototype.invalidMessage = function () {
+
+    return _.template(this.errorMsg)({
+      data: this.data
+    });
+  };
+
 
   // Settings
   // ---------------------------
@@ -147,11 +208,12 @@ $(function (w, d) {
 
       if (!_.isString(type) || !_.isFunction(predict)) return;
 
-      if (!_.contains(CUSTOM_VALIDS, type)) {
-        CUSTOM_VALIDS.push(type);
+      if (!Validation.Types.custom[type]) {
+        Validation.Types.custom[type] = {
+          type: type,
+          predict: predict
+        };
       }
-
-      VALID_PREDICTS[type] = predict;
     }
   };
 
@@ -271,13 +333,13 @@ $(function (w, d) {
           validations = [];
 
       // HTML5 validations
-      _.each(HTML5_VALIDS, function (criteria) {
-        collectValidationData(input, criteria, validations, false);
+      _.each(Validation.Types.html5, function (type) {
+        collectValidationData(input, type.type, validations, false);
       });
 
       // Custom validations with `data-` prefix
-      _.each(CUSTOM_VALIDS, function (criteria) {
-        collectValidationData(input, criteria, validations, true);
+      _.each(Validation.Types.custom, function (type) {
+        collectValidationData(input, type.type, validations, true);
       });
 
       return this.addValidation(validations);
@@ -286,6 +348,120 @@ $(function (w, d) {
 
     // Value
     // ---------------------------
+
+
+    /**
+     * Get the value from input name in a form
+     * - checkbox single: boolean
+     * - checkbox list: array of checked value
+     * - radio: check value
+     * - default: value
+     * @param {string} name
+     * @returns {any}
+     */
+    getVal: function (name) {
+      var $input = this.find('[name=' + name + ']'),
+          type = $input[0].type,
+          value;
+
+      switch(type) {
+
+      // All checked `checkbox`
+      case 'checkbox':
+
+        // One checkbox -> true / false
+        if ($input.length === 1) {
+          return $input[0].checked;
+        }
+
+        // A list of checkbox -> checked value
+        value = _.map($input.filter(':checked'), function (input) {
+          return input.value;
+        });
+
+        return value.length ? value : null;
+
+      // Checked `radio`
+      case 'radio':
+        value = $input.filter(':checked').val();
+        return value === void 0 ? null : value;
+
+      // Other
+      default:
+        return $input.val();
+      }
+    },
+
+
+    /**
+     * Set value to inputs in a form
+     * @param {string} name
+     * @param {any} value
+     * @param {Object}  options
+     * @param {Boolean} options.validate - validate the input or not
+     * @returns {jQuery}
+     */
+    setVal: function (name, value, options) {
+      var $input = this.find('[name=' + name + ']'),
+          type = $input[0].type,
+          validate = options && options.validate,
+          radio;
+
+      switch(type) {
+
+      // All checked `checkbox`
+      case 'checkbox':
+
+        // One checkbox -> true / false
+        if ($input.length === 1) {
+          $input[0].checked = value;
+          break;
+        }
+
+        // A list of checkbox -> checked value
+        value = _.castArray(value);
+
+        $input.each(function () {
+
+          // values are casted to string and compare
+          this.checked = (function (value, input) {
+            var len = value.length;
+
+            while (len--) {
+              if (input.value + '' === value[len] + '') {
+                return true;
+              }
+            }
+
+            return false;
+          }(value, this));
+        });
+
+        break;
+
+      // Checked `radio`
+      case 'radio':
+        radio = _.find($input, function (input) {
+          return input.value + '' === value + '';
+        });
+
+        if (radio) {
+          radio.checked = true;
+        }
+
+        break;
+
+      // Other
+      default:
+        $input.val(value);
+      }
+
+      if (validate) {
+        $input._validate();
+      }
+
+      return this;
+    },
 
 
     /**
@@ -338,7 +514,8 @@ $(function (w, d) {
 
     /**
      * Collect form data
-     * - checkbox: Array of checked values
+     * - checkbox single: checked value
+     * - checkbox list: Array of checked values
      * - radio: checked value
      * - select-one: selected value
      * - select-multiple: Array of selected values
@@ -359,6 +536,14 @@ $(function (w, d) {
 
         // All checked `checkbox`
         case 'checkbox':
+
+          // Single
+          if ($form.find('[name=' + input.name + ']').length === 1) {
+            formData[input.name] = input.checked;
+            break;
+          }
+
+          // List
           formData[input.name] || (formData[input.name] = []);
 
           if (input.checked) {
@@ -423,16 +608,38 @@ $(function (w, d) {
 
 
   /**
-   * Toggle valid / invalid CSS classes
+   * `valid` and `invalid` event
+   * 1. Toggle valid / invalid CSS classes
+   * 2. Generate invalid message
    */
-  $d.on('valid invalid', ':enabled', function (e) {
+  $d.on('valid invalid', ':enabled', function (e, options) {
+    var $target = $(e.target),
+        $parent = $target.parent(),
+        $p,
+        invalidMessage;
 
-    $(e.target)
+    $target
         .removeClass('form-valid form-invalid')
-        .addClass('form-' + e.type)
-        .parent()
+        .addClass('form-' + e.type);
+
+    $parent
         .removeClass('has-valid has-invalid')
         .addClass('has-' + e.type);
+
+    // Invalid message
+    if (e.type === 'invalid') {
+      invalidMessage = _.map(_.keys(options), function (key) {
+        return options[key].invalidMessage();
+      }).join('<br>');
+
+      if (($p = $parent.children('.form-error-text')).length) {
+        $p.html(invalidMessage);
+      } else {
+        $parent.append('<p class="form-error-text">' + invalidMessage + '</p>');
+      }
+    } else {
+      $parent.children('.form-error-text').remove();
+    }
 
     e.stopPropagation();
   });

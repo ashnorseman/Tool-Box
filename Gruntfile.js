@@ -27,7 +27,8 @@ module.exports = function (grunt) {
           'public/dist/tool-box-mini.min.js': [
             'public/js/detect-device.js',
             'public/js/jquery-ext.js',
-            'public/js/underscore-ext.js'
+            'public/js/underscore-ext.js',
+            'public/js/jquery-form.js'
           ]
         }
       }

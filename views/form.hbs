@@ -48,7 +48,9 @@
     $(function () {
 
       $('form').on('invalid', function (e, error) {
-        _.log(error);
+        if (e.target === this) {
+          _.log(error);
+        }
       });
 
       $('#form-submit').on($.events.click, function () {
