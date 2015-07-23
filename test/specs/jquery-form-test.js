@@ -93,6 +93,17 @@ describe('jQuery Form', function () {
     expect($input[0].validationError.format).to.be.an('object');
   });
 
+  it('_validate() - change criteria', function () {
+    var $input = $('<input required>');
+
+    $input._validate();
+    expect(_.keys($input[0].validationError)).to.be.length(1);
+
+    $input[0].required = false;
+    $input._validate();
+    expect(_.keys($input[0].validationError)).to.be.length(0);
+  });
+
   it('_validate() - empty and non-required', function () {
     var $input = $('<input min="100">');
 

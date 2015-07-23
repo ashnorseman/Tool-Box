@@ -34,6 +34,8 @@ $(function (w, d) {
 
     if (_.exists(data)) {
       validations.push(validate);
+    } else {
+      input.validation && delete input.validation[criteria];
     }
   }
 
@@ -300,7 +302,11 @@ $(function (w, d) {
       this._collectValidation();
 
       // Do not validate inputs without validations
-      if (_.isEmpty(input.validation)) return null;
+      if (_.isEmpty(input.validation)) {
+        input.validationError = null;
+        this.trigger('valid');
+        return null;
+      }
 
       // Do not validate empty non-required validations
       if (!input.validation.required && (_.isEmpty(value) || !value.length)) {
@@ -496,9 +502,11 @@ $(function (w, d) {
 
         // Remove relative classes
         this
-            .removeClass('form-valid form-invalid')
-            .parent()
-            .removeClass('has-valid has-invalid');
+          .removeClass('form-valid form-invalid')
+          .parent()
+          .removeClass('has-valid has-invalid')
+          .find('.form-error-text')
+          .remove();
 
         // Trigger event
         this.trigger('clear');
