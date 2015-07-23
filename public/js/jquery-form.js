@@ -128,15 +128,15 @@ $(function (w, d) {
           }
         }
       },
-      minlength: {
-        type: 'minlength',
+      minLength: {
+        type: 'minLength',
         errorMsg: '您输入的文字长度不得小于 <%= data %>',
         predict: function (value, validation) {
           return value.length >= +validation.data;
         }
       },
-      maxlength: {
-        type: 'maxlength',
+      maxLength: {
+        type: 'maxLength',
         errorMsg: '您输入的文字长度不得大于 <%= data %>',
         predict: function (value, validation) {
           return value.length <= +validation.data;
@@ -160,7 +160,7 @@ $(function (w, d) {
 
           switch (validation.data) {
           case 'email':
-            pattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/;
+            pattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
             break;
           case 'number':
             pattern = /^[-+]?[0-9]*\.?[0-9]+$/;

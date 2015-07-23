@@ -61,7 +61,7 @@ describe('jQuery Form', function () {
   });
 
   it('_validate()', function () {
-    var $input = $('<input required min="100" minlength="2" pattern="\\d+" data-format="number">'),
+    var $input = $('<input required min="100" minLength="2" pattern="\\d+" data-format="number">'),
         $empty = $('<input>');
 
     expect($input[0].validationError).to.be.not.ok;
@@ -82,13 +82,13 @@ describe('jQuery Form', function () {
     $input._validate();
     expect(_.keys($input[0].validationError)).to.be.length(2);
     expect($input[0].validationError.min).to.be.an('object');
-    expect($input[0].validationError.minlength).to.be.an('object');
+    expect($input[0].validationError.minLength).to.be.an('object');
 
     $input.val('a');
     $input._validate();
     expect(_.keys($input[0].validationError)).to.be.length(4);
     expect($input[0].validationError.min).to.be.an('object');
-    expect($input[0].validationError.minlength).to.be.an('object');
+    expect($input[0].validationError.minLength).to.be.an('object');
     expect($input[0].validationError.pattern).to.be.an('object');
     expect($input[0].validationError.format).to.be.an('object');
   });
@@ -212,20 +212,20 @@ describe('jQuery Form', function () {
   });
 
   it('_collectValidation()', function () {
-    var $input = $('<input required min="1" minlength="1" pattern="\\d+" data-format="number">'),
+    var $input = $('<input required min="1" minLength="1" pattern="\\d+" data-format="number">'),
         $empty = $('<input>');
 
     $input._collectValidation();
     expect($input[0].validation.required.predict()).to.be.equal(false);
     expect($input[0].validation.min.predict()).to.be.equal(false);
-    expect($input[0].validation.minlength.predict()).to.be.equal(false);
+    expect($input[0].validation.minLength.predict()).to.be.equal(false);
     expect($input[0].validation.pattern.predict()).to.be.equal(false);
     expect($input[0].validation.format.predict()).to.be.equal(false);
 
     $input.val(55);
     expect($input[0].validation.required.predict()).to.be.equal(true);
     expect($input[0].validation.min.predict()).to.be.equal(true);
-    expect($input[0].validation.minlength.predict()).to.be.equal(true);
+    expect($input[0].validation.minLength.predict()).to.be.equal(true);
     expect($input[0].validation.pattern.predict()).to.be.equal(true);
     expect($input[0].validation.format.predict()).to.be.equal(true);
 
