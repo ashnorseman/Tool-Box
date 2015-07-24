@@ -304,7 +304,7 @@ $(function (w, d) {
       // Do not validate inputs without validations
       if (_.isEmpty(input.validation)) {
         input.validationError = null;
-        this.trigger('valid');
+        this.trigger('no-valid');
         return null;
       }
 
@@ -589,7 +589,7 @@ $(function (w, d) {
       var $form = this.closest('form');
 
       // Only submit valid forms
-      if (!$form.isValid()) return this;
+      if (!$form.isValid()) return new $.Deferred();
 
       if (_.isString(url)) {
 
@@ -648,6 +648,21 @@ $(function (w, d) {
     } else {
       $parent.children('.form-error-text').remove();
     }
+
+    e.stopPropagation();
+  });
+
+
+  /**
+   * `no-valid` event (an input without validation)
+   */
+  $d.on('no-valid', ':enabled', function (e) {
+
+    $(e.target)
+      .removeClass('form-valid form-invalid')
+      .parent()
+      .removeClass('has-valid has-invalid')
+      .children('.form-error-text').remove();
 
     e.stopPropagation();
   });
