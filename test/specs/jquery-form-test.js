@@ -3,7 +3,7 @@
 // ---------------------------
 
 
-describe('jQuery Form', function () {
+describe.only('jQuery Form', function () {
   var $body = $(document.body);
 
   afterEach(function () {
@@ -322,6 +322,16 @@ describe('jQuery Form', function () {
     expect($form.getVal('text')).to.be.equal('text');
   });
 
+  it('.setVal() - date', function () {
+    var $form = $('<form></form>'),
+        $input = $('<input type="date" name="date">');
+
+    $form.append($input);
+    $form.setVal('date', new Date(2014, 5, 1));
+
+    expect($form.getVal('date')).to.be.equal('2014-06-01');
+  });
+
   it('.setVal() - checkbox single', function () {
     var $form = $('<form></form>'),
         $check = $('<input type="checkbox" name="checkbox" value="1">');
@@ -486,6 +496,16 @@ describe('jQuery Form', function () {
     expect(_.keys(formData)).to.be.length(7);
 
     expect($body.getFormData($form)).to.be.deep.equal(formData);
+  });
+
+  it('.setFormData(form)', function () {
+    var $form = $('<form><input type="text" name="text"></form>');
+
+    $form.setFormData({
+      text: 'text'
+    });
+
+    expect($form.getFormData().text).to.be.equal('text');
   });
 
   it('.submit() - url', function () {

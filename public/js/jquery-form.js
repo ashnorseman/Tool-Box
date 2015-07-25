@@ -367,7 +367,7 @@ $(function (w, d) {
      */
     getVal: function (name) {
       var $input = this.find('[name=' + name + ']'),
-          type = $input[0].type,
+          type = $input[0] && $input[0].type,
           value;
 
       switch(type) {
@@ -409,7 +409,7 @@ $(function (w, d) {
      */
     setVal: function (name, value, options) {
       var $input = this.find('[name=' + name + ']'),
-          type = $input[0].type,
+          type = $input[0] && $input[0].type,
           validate = options && options.validate,
           radio;
 
@@ -455,6 +455,11 @@ $(function (w, d) {
           radio.checked = true;
         }
 
+        break;
+
+      // Date
+      case 'date':
+        $input.val(_.formatTime(new Date(value)));
         break;
 
       // Other
@@ -573,6 +578,22 @@ $(function (w, d) {
       });
 
       return formData;
+    },
+
+
+    /**
+     * Fill the form with name-value pairs
+     * @param {Object} data
+     * @returns {setFormData}
+     */
+    setFormData: function (data) {
+      var $form = this;
+
+      _.each(data, function (value, name) {
+        $form.setVal(name, value);
+      });
+
+      return this;
     },
 
 
