@@ -43,6 +43,33 @@ describe('underscore-ext', function () {
     expect(arr[2]).to.be.equal(2);
   });
 
+  it('_.addDate', function () {
+    var oldDate = new Date(2014, 0, 31);
+
+    expect(_.addDate(oldDate, 1).getDate()).to.be.equal(1);
+    expect(_.addDate(oldDate, 2).getDate()).to.be.equal(2);
+    expect(_.addDate(oldDate, -1).getDate()).to.be.equal(30);
+    expect(_.addDate(oldDate, -31).getDate()).to.be.equal(31);
+  });
+
+  it('_.addWeek', function () {
+    var oldDate = new Date(2014, 0, 1);
+
+    expect(_.addWeek(oldDate, 1).getDate()).to.be.equal(8);
+    expect(_.addWeek(oldDate, 2).getDate()).to.be.equal(15);
+    expect(_.addWeek(oldDate, -1).getDate()).to.be.equal(25);
+    expect(_.addWeek(oldDate, -2).getDate()).to.be.equal(18);
+  });
+
+  it('_.addMonth', function () {
+    var oldDate = new Date(2014, 0, 31);
+
+    expect(_.addMonth(oldDate, 1).valueOf()).to.be.equal(new Date(2014, 1, 28).valueOf());
+    expect(_.addMonth(oldDate, 2).valueOf()).to.be.equal(new Date(2014, 2, 31).valueOf());
+    expect(_.addMonth(oldDate, -1).valueOf()).to.be.equal(new Date(2013, 11, 31).valueOf());
+    expect(_.addMonth(oldDate, -2).valueOf()).to.be.equal(new Date(2013, 10, 30).valueOf());
+  });
+
   it('_.dayStart', function () {
     var today = new Date(),
         todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate()).valueOf(),

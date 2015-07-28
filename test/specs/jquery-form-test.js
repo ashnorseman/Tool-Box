@@ -3,7 +3,7 @@
 // ---------------------------
 
 
-describe.only('jQuery Form', function () {
+describe('jQuery Form', function () {
   var $body = $(document.body);
 
   afterEach(function () {

@@ -72,6 +72,49 @@ _.mixin({
 
 
   /**
+   * Add certain dates to a date
+   * @param {number|Date} timestamp - original date
+   * @param {number} dates - positive: future, negative: past
+   * @returns {Date}
+   */
+  addDate: function (timestamp, dates) {
+    var date = new Date(timestamp);
+
+    if (!_.isValidDate(date)) return _.addDate(new Date(), dates);
+
+    return new Date(date.valueOf() + 1000 * 60 * 60 * 24 * dates);
+  },
+
+
+  /**
+   * Add certain weeks to a date
+   * @param {number|Date} timestamp - original date
+   * @param {number} weeks - positive: future, negative: past
+   * @returns {Date}
+   */
+  addWeek: function (timestamp, weeks) {
+    return _.addDate(timestamp, weeks * 7);
+  },
+
+
+  addMonth: function (timestamp, months) {
+    var date = new Date(timestamp),
+        curMonth, result;
+
+    if (!_.isValidDate(date)) return _.addMonth(new Date(), months);
+
+    curMonth = date.getMonth();
+    result = new Date(new Date(timestamp).setMonth(curMonth + months));
+
+    if (result.getDate() !== date.getDate()) {
+      result = new Date(result.setDate(0));
+    }
+
+    return result;
+  },
+
+
+  /**
    * The start point (0 millisecond) of a day
    * @param {number|Date} timestamp
    * @returns {number}

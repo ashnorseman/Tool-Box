@@ -149,6 +149,30 @@ step < 0: move up
 
 ### Dates
 
+#### `_.addDate(timestamp, dates)`
+
+Add certain dates to a date
+
+    @param {number|Date} timestamp - original date
+    @param {number} dates - positive: future, negative: past
+    @returns {Date}
+
+#### `_.addWeek(timestamp, weeks)`
+
+Add certain weeks to a date
+
+    @param {number|Date} timestamp - original date
+    @param {number} weeks - positive: future, negative: past
+    @returns {Date}
+
+#### `_.addMonth(timestamp, months)`
+
+Add certain months to a date
+
+    @param {number|Date} timestamp - original date
+    @param {number} months - positive: future, negative: past
+    @returns {Date}
+
 #### `_.dayStart(timestamp)`
 
 The start point (0 millisecond) of a day
