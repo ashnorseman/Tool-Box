@@ -29,6 +29,21 @@ $.fn.extend({
 
 
   /**
+   * Move the caret to the end of an input
+   */
+  moveCaretToEnd: function () {
+    var input = this[0];
+
+    if (input.setSelectionRange) {
+      this.focus();
+      input.setSelectionRange(input.value.length, input.value.length);
+    }
+
+    return this;
+  },
+
+
+  /**
    * Hide loading effect
    * @returns {jQuery}
    */

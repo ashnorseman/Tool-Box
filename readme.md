@@ -33,6 +33,12 @@ You can set up margins if the element is larger than screen size.
     @param {number} [marginLeft=0]
     @returns {jQuery}
 
+#### `.moveCaretToEnd()`
+
+Move the caret to the end of an input
+
+    @returns {jQuery}
+
 #### `.hideLoading()`
 
 Hide loading effect (used with css)
