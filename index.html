@@ -19,7 +19,10 @@
     </section>
 
     <section class="main-content">
-      <h2>
+      <h1>
+<a id="tool-box" class="anchor" href="#tool-box" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tool Box</h1>
+
+<h2>
 <a id="detect-device" class="anchor" href="#detect-device" aria-hidden="true"><span class="octicon octicon-link"></span></a>Detect Device</h2>
 
 <h3>
@@ -138,6 +141,14 @@ document.cookie // =&gt; 'dpr=1'
 <p>Hitting enter key on the element will trigger <code>click</code> event on relative <code>data-enter</code> element.</p>
 
 <h4>
+<a id="data-accesskey65" class="anchor" href="#data-accesskey65" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>[data-accesskey="65"]</code>
+</h4>
+
+<p>Accesskey</p>
+
+<p>Trigger a click event from accesskey (when not focused on any inputs)</p>
+
+<h4>
 <a id="data-select-allselect-name-data-selectselect-all" class="anchor" href="#data-select-allselect-name-data-selectselect-all" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>[data-select-all="select-name"], [data-select="#select-all"]</code>
 </h4>
 
@@ -210,6 +221,39 @@ document.cookie // =&gt; 'dpr=1'
 
 <h3>
 <a id="dates" class="anchor" href="#dates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dates</h3>
+
+<h4>
+<a id="_adddatetimestamp-dates" class="anchor" href="#_adddatetimestamp-dates" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.addDate(timestamp, dates)</code>
+</h4>
+
+<p>Add certain dates to a date</p>
+
+<pre><code>@param {number|Date} timestamp - original date
+@param {number} dates - positive: future, negative: past
+@returns {Date}
+</code></pre>
+
+<h4>
+<a id="_addweektimestamp-weeks" class="anchor" href="#_addweektimestamp-weeks" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.addWeek(timestamp, weeks)</code>
+</h4>
+
+<p>Add certain weeks to a date</p>
+
+<pre><code>@param {number|Date} timestamp - original date
+@param {number} weeks - positive: future, negative: past
+@returns {Date}
+</code></pre>
+
+<h4>
+<a id="_addmonthtimestamp-months" class="anchor" href="#_addmonthtimestamp-months" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.addMonth(timestamp, months)</code>
+</h4>
+
+<p>Add certain months to a date</p>
+
+<pre><code>@param {number|Date} timestamp - original date
+@param {number} months - positive: future, negative: past
+@returns {Date}
+</code></pre>
 
 <h4>
 <a id="_daystarttimestamp" class="anchor" href="#_daystarttimestamp" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>_.dayStart(timestamp)</code>
@@ -659,6 +703,9 @@ cv = new CV({
 
 <h4>
 <a id="collectionviewresetmodel1-model2" class="anchor" href="#collectionviewresetmodel1-model2" aria-hidden="true"><span class="octicon octicon-link"></span></a>collectionView.reset([model1, model2])</h4>
+
+<h4>
+<a id="collectionviewcreatemodel-options" class="anchor" href="#collectionviewcreatemodel-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>collectionView.create(model, options)</h4>
 
 <h3>
 <a id="backbonemodule" class="anchor" href="#backbonemodule" aria-hidden="true"><span class="octicon octicon-link"></span></a>Backbone.Module</h3>
