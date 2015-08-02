@@ -179,6 +179,14 @@ Add certain months to a date
     @param {number} months - positive: future, negative: past
     @returns {Date}
 
+#### `_.addYear(timestamp, years)`
+
+Add certain years to a date
+
+    @param {number|Date} timestamp - original date
+    @param {number} years - positive: future, negative: past
+    @returns {Date}
+
 #### `_.dayStart(timestamp)`
 
 The start point (0 millisecond) of a day

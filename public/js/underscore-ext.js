@@ -97,6 +97,12 @@ _.mixin({
   },
 
 
+  /**
+   * Add certain months to a date
+   * @param {number|Date} timestamp - original date
+   * @param {number} months - positive: future, negative: past
+   * @returns {Date}
+   */
   addMonth: function (timestamp, months) {
     var date = new Date(timestamp),
         curMonth, result;
@@ -111,6 +117,24 @@ _.mixin({
     }
 
     return result;
+  },
+
+
+  /**
+   * Add certain years to a date
+   * @param {number|Date} timestamp - original date
+   * @param {number} years - positive: future, negative: past
+   * @returns {Date}
+   */
+  addYear: function (timestamp, years) {
+    var date = new Date(timestamp),
+        curYear;
+
+    if (!_.isValidDate(date)) return _.addYear(new Date(), years);
+
+    curYear = date.getFullYear();
+
+    return new Date(date.setFullYear(curYear + years));
   },
 
 

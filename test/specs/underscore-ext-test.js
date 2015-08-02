@@ -70,6 +70,15 @@ describe('underscore-ext', function () {
     expect(_.addMonth(oldDate, -2).valueOf()).to.be.equal(new Date(2013, 10, 30).valueOf());
   });
 
+  it('_.addYear', function () {
+    var oldDate = new Date(2012, 1, 29);
+
+    expect(_.addYear(oldDate, 1).valueOf()).to.be.equal(new Date(2013, 2, 1).valueOf());
+    expect(_.addYear(oldDate, 4).valueOf()).to.be.equal(new Date(2016, 1, 29).valueOf());
+    expect(_.addYear(oldDate, -1).valueOf()).to.be.equal(new Date(2011, 2, 1).valueOf());
+    expect(_.addYear(oldDate, -2).valueOf()).to.be.equal(new Date(2010, 2, 1).valueOf());
+  });
+
   it('_.dayStart', function () {
     var today = new Date(),
         todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate()).valueOf(),
