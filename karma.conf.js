@@ -24,6 +24,7 @@ module.exports = function(config) {
       'public/js/underscore-ext.js',
       'public/js/backbone-ext.js',
       'public/js/jquery-form.js',
+      'public/js/template.js',
       'test/**/*.js'
     ],
 
