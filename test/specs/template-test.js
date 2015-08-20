@@ -90,6 +90,22 @@ describe.only('Template', function () {
     expect(Template(tpl, obj)).to.be.equal('<p>a b</p><p>A B</p>');
   });
 
+  it('render `each`: index', function () {
+    var tpl = '{{#each list}}<p>{{=index}} {{=propA}}</p>{{/each}}',
+        obj = {
+          list: [
+            {
+              propA: 'a'
+            },
+            {
+              propA: 'A'
+            }
+          ]
+        };
+
+    expect(Template(tpl, obj)).to.be.equal('<p>0 a</p><p>1 A</p>');
+  });
+
   it.only('render `each`', function () {
     var tpl = '{{#each list}}<p>{{=propA}}</p>{{/each}}{{#each list}}<p>{{=propB}}</p>{{/each}}',
         obj = {

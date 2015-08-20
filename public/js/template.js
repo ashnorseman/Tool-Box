@@ -34,6 +34,7 @@
         result = '', i;
 
     for (i = 0; i < list.length; i += 1) {
+      list[i].index = i;
       result += Template(str, list[i]);
     }
 
