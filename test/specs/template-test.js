@@ -140,4 +140,38 @@ describe.only('Template', function () {
 
     expect(Template(tpl, obj)).to.be.equal('<p>b</p><p>B</p>');
   });
+
+  it('`if` with object', function () {
+    var tpl = '<li class="{{#if active}}active{{/if}}">{{=name}}</li>',
+        obj = {
+          active: true,
+          name: 'Name'
+        };
+
+    expect(Template(tpl, obj)).to.be.equal('<li class="active">Name</li>');
+  });
+
+  it('`each` with object', function () {
+    var tpl = '<div>{{=active}}</div>' +
+        '<ul>' +
+          '{{#each list}}' +
+            '<li{{#if active}} class="active"{{/if}}>{{=name}}</li>' +
+          '{{/each}}' +
+        '</ul>',
+        obj = {
+          active: 'A',
+          list: [
+            {
+              active: true,
+              name: 'A'
+            },
+            {
+              active: false,
+              name: 'B'
+            }
+          ]
+        };
+
+    expect(Template(tpl, obj)).to.be.equal('<div>A</div><ul><li class="active">A</li><li>B</li></ul>');
+  });
 });

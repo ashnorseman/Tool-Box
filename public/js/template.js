@@ -51,7 +51,7 @@
   w.Template = function (str, obj) {
 
     if (directiveReg.test(str)) {
-      return str.replace(directiveReg, function (match, directive, param, subStr) {
+      str = str.replace(directiveReg, function (match, directive, param, subStr) {
 
         switch (directive) {
         case 'if':
@@ -63,10 +63,8 @@
           return renderEach(subStr, param, obj);
         }
       });
-    } else {
-      return renderObj(str, obj);
     }
 
-    return '';
+    return renderObj(str, obj);
   };
 }(window));
